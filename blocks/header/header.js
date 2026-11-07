@@ -5,8 +5,10 @@ const isDesktop = window.matchMedia('(width >= 1025px)');
 const SECTION_ROLES = ['utility', 'account', 'main', 'search'];
 
 /**
- * Fetches the nav fragment (local preview first, then the site root on DA/EDS).
- * Relative image paths are resolved against the fragment URL.
+ * Fetches the nav fragment (local preview first, then the site root on DA/EDS) and
+ * normalizes the markup Document Authoring produces: list items whose inline content is
+ * wrapped in a <p> are unwrapped, and relative image/picture sources are resolved against
+ * the fragment URL (so they also work on pages below the site root).
  * @returns {Promise<HTMLElement|null>}
  */
 async function fetchNav() {
@@ -15,11 +17,32 @@ async function fetchNav() {
   if (!resp.ok) return null;
   const wrapper = document.createElement('div');
   wrapper.innerHTML = await resp.text();
+  wrapper.querySelectorAll('li > p').forEach((p) => p.replaceWith(...p.childNodes));
   wrapper.querySelectorAll('img').forEach((img) => {
     img.src = new URL(img.getAttribute('src'), resp.url).href;
     img.loading = 'eager';
   });
+  wrapper.querySelectorAll('source[srcset]').forEach((source) => {
+    source.srcset = source.getAttribute('srcset').split(',')
+      .map((candidate) => {
+        const [src, ...descriptor] = candidate.trim().split(/\s+/);
+        return [new URL(src, resp.url).href, ...descriptor].join(' ');
+      })
+      .join(', ');
+  });
   return wrapper;
+}
+
+/**
+ * True when a link should toggle the account panel instead of navigating: an in-page hash,
+ * or the same page the account form submits to (a no-JS fallback that survives authoring).
+ */
+function isAccountLink(link, accountAction) {
+  const href = link.getAttribute('href') || '';
+  if (href.startsWith('#')) return true;
+  if (!accountAction) return false;
+  const path = (url) => new URL(url, window.location.href).pathname.replace(/\/$/, '');
+  return path(link.href) === path(accountAction);
 }
 
 function createIcon(name) {
@@ -118,7 +141,7 @@ function buildPickers(list, root) {
     current.textContent = li.querySelector(':scope > strong')?.textContent.trim() || '';
     // inline spacing between parts matches the source trigger
     trigger.append(label, ' ', current, ' ');
-    const flag = li.querySelector(':scope > img');
+    const flag = li.querySelector(':scope > picture, :scope > img');
     if (flag) trigger.append(flag, ' ');
     picker.append(trigger);
     if (options) {
@@ -195,7 +218,7 @@ function bindAccountToggle(root, link) {
   return button;
 }
 
-function buildUtility(section, accountSection, root) {
+function buildUtility(section, accountSection, accountAction, root) {
   const bar = document.createElement('div');
   bar.className = 'nav-utility';
   const inner = document.createElement('div');
@@ -207,7 +230,7 @@ function buildUtility(section, accountSection, root) {
     a.className = `nav-cta nav-cta-${i + 1}`;
     a.prepend(createIcon(icons[i] || 'cart'), ' ');
     inner.append(a);
-    if (a.getAttribute('href').startsWith('#') && accountSection) {
+    if (accountSection && isAccountLink(a, accountAction)) {
       bindAccountToggle(root, a);
       inner.append(buildAccountPanel(accountSection));
     }
@@ -220,7 +243,7 @@ function buildUtility(section, accountSection, root) {
  * Builds the mobile tools (icon links, account toggle, hamburger) from the paragraphs
  * that follow the brand link.
  */
-function buildTools(paragraphs, root) {
+function buildTools(paragraphs, accountAction, root) {
   const tools = document.createElement('div');
   tools.className = 'nav-tools';
   const icons = ['compass', 'credit-card'];
@@ -236,7 +259,7 @@ function buildTools(paragraphs, root) {
       link.append(createIcon(icons[iconIndex] || 'compass'), label);
       iconIndex += 1;
       tools.append(link);
-      if (link.getAttribute('href').startsWith('#')) bindAccountToggle(root, link);
+      if (isAccountLink(link, accountAction)) bindAccountToggle(root, link);
       return;
     }
     // a text-only paragraph labels the hamburger
@@ -275,7 +298,7 @@ function setDropExpanded(drop, open) {
   if (sub && !isDesktop.matches) setCollapsed(sub, open);
 }
 
-function buildMain(section, root) {
+function buildMain(section, accountAction, root) {
   const bar = document.createElement('div');
   bar.className = 'nav-main';
   const inner = document.createElement('div');
@@ -288,7 +311,7 @@ function buildMain(section, root) {
     inner.append(brandLink);
   }
   const toolPs = paragraphs.filter((p) => p !== brandP);
-  if (toolPs.length) inner.append(buildTools(toolPs, root));
+  if (toolPs.length) inner.append(buildTools(toolPs, accountAction, root));
   const list = section.querySelector(':scope > ul');
   if (list) {
     const sections = document.createElement('div');
@@ -452,8 +475,12 @@ export default async function decorate(block) {
   const nav = document.createElement('nav');
   nav.id = 'nav';
   nav.setAttribute('aria-label', 'Main');
-  if (sections.utility) nav.append(buildUtility(sections.utility, sections.account, nav));
-  if (sections.main) nav.append(buildMain(sections.main, nav));
+  // the account form's submit link identifies which links toggle the login panel
+  const accountAction = sections.account?.querySelector('strong > a')?.href;
+  if (sections.utility) {
+    nav.append(buildUtility(sections.utility, sections.account, accountAction, nav));
+  }
+  if (sections.main) nav.append(buildMain(sections.main, accountAction, nav));
   if (sections.search) nav.append(buildSearch(sections.search));
 
   nav.querySelector('button.nav-hamburger')?.addEventListener('click', () => toggleMenu(nav));
