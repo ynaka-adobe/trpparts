@@ -17,7 +17,8 @@ function buildRetailerSearch(nearbyLink) {
   const form = document.createElement('form');
   form.className = 'columns-retailer-search';
   form.method = 'get';
-  form.action = action.origin === window.location.origin ? action.pathname : RETAILER_PATH;
+  // search the retailer locator on whichever site the Nearby link points to
+  form.action = new URL(RETAILER_PATH, action.origin).href;
   form.setAttribute('role', 'search');
 
   const row = document.createElement('div');
