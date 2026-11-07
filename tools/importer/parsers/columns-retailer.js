@@ -38,7 +38,13 @@ export default function parse(element, { document }) {
     if (h) col1.push(heading(document, h));
     const nearby = searchCol.querySelector('a.find-nearby, #findNearByBttn')
       || searchCol.querySelector('a[href*="retailers"]');
-    if (nearby) col1.push(linkPara(document, nearby, '/retailers?findNearBy=findNearBy'));
+    if (nearby) {
+      const p = linkPara(document, nearby, '/retailers?findNearBy=findNearBy');
+      // the retailer locator isn't migrated: point Nearby (and the block's address search) at trpparts.com
+      const link = p.querySelector('a');
+      link.href = new URL(link.getAttribute('href'), 'https://www.trpparts.com/').href;
+      col1.push(p);
+    }
   }
 
   // Column 2: buy online

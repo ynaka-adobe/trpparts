@@ -1,0 +1,46 @@
+{
+  "variantName": "cards-resources",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-11-07T00:00:00.000Z",
+  "canonicalModel": "standalone",
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/resources/",
+    "originPage": "TRP Parts Resources library",
+    "blockPosition": "main"
+  },
+  "visualCharacteristics": {
+    "section": "Resources library (search, Refine-by sidebar, paginated results)",
+    "colorScheme": "light",
+    "density": "medium",
+    "purpose": "searchable, faceted, paginated list of downloadable documents and videos",
+    "imagePattern": "thumbnail",
+    "description": "Search Resources input at the top right; left 'Refine by' sidebar (collapsible Resource Type and Brand checkbox facets with counts, Show All) beside the results: 'Results 1-15 of N' + numbered pagination above and below a vertical list of resources. Each resource: blue underlined H2 title link above a thumbnail (left, ~2/12) and description + blue Download / Watch Video button. Mobile: sidebar stacks above the list."
+  },
+  "contentPattern": {
+    "structure": "one row per resource, 2 cells; cell 1 = thumbnail image (optional); cell 2 = H2 title linked to the PDF or YouTube URL, optional description paragraph, 'Download' or 'Watch Video' link paragraph, last paragraph 'Type: <type> | Brand: <brand>'",
+    "buttonCount": 1,
+    "imageCount": 1,
+    "hasDescription": true,
+    "notes": "The block hides the tag line and builds the keyword search, Type/Brand facets with counts, 'Results x-y of N' and 15-per-page pagination from the rows. PDF links open in a new tab; YouTube/Vimeo links and video thumbnails open the shared modal player (helpers exported from cards-video)."
+  },
+  "options": [],
+  "memberVariantIds": [],
+  "reuseGuidance": {
+    "suitableFor": [
+      "resource / document libraries with type and brand tags",
+      "long lists that need keyword search, facet filters and pagination"
+    ],
+    "notSuitableFor": [
+      "short card grids (use cards or cards-video)",
+      "lists whose rows have no 'Type: ... | Brand: ...' tag line (facets would be empty)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/resources"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-07T00:00:00.000Z"
+  }
+}

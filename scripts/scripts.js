@@ -129,6 +129,32 @@ function decorateSections(main) {
 }
 
 /**
+ * Adds a "Home › {page title}" breadcrumb at the top of the first section
+ * (pages with metadata breadcrumbs: true).
+ * @param {Element} main The container element
+ */
+function buildBreadcrumbs(main) {
+  const first = main.querySelector(':scope > div');
+  if (!first) return;
+  const title = getMetadata('og:title') || main.querySelector('h1')?.textContent || document.title;
+  const nav = document.createElement('nav');
+  nav.className = 'breadcrumbs';
+  nav.setAttribute('aria-label', 'Breadcrumb');
+  const list = document.createElement('ol');
+  const home = document.createElement('li');
+  const homeLink = document.createElement('a');
+  homeLink.href = '/';
+  homeLink.textContent = 'Home';
+  home.append(homeLink);
+  const current = document.createElement('li');
+  current.setAttribute('aria-current', 'page');
+  current.textContent = title.trim();
+  list.append(home, current);
+  nav.append(list);
+  first.prepend(nav);
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -149,10 +175,11 @@ export function decorateMain(main) {
 async function loadEager(doc) {
   doc.documentElement.lang = 'en';
   decorateTemplateAndTheme();
+  const main = doc.querySelector('main');
   if (getMetadata('breadcrumbs').toLowerCase() === 'true') {
     doc.body.dataset.breadcrumbs = true;
+    if (main) buildBreadcrumbs(main);
   }
-  const main = doc.querySelector('main');
   if (main) {
     // the first image in main is the LCP candidate: raise its priority before decoration
     main.querySelector('img')?.setAttribute('fetchpriority', 'high');

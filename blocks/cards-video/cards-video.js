@@ -7,7 +7,7 @@ import { createModal } from '../modal/modal.js';
  * @param {string} href
  * @returns {string|null}
  */
-function toEmbedUrl(href) {
+export function toEmbedUrl(href) {
   let url;
   try {
     url = new URL(href, window.location.href);
@@ -31,7 +31,7 @@ function toEmbedUrl(href) {
   return null;
 }
 
-async function openVideo(embedUrl, title) {
+export async function openVideo(embedUrl, title) {
   const wrapper = document.createElement('div');
   wrapper.className = 'cards-video-player';
   const iframe = document.createElement('iframe');

@@ -9,8 +9,7 @@
         "https://www.trpparts.com/"
       ],
       "representativeUrl": "https://www.trpparts.com/",
-      "description": "TRP Parts home page: hero carousel, part category grid, retailer search, featured videos, loyalty offers and membership sign-up",
-      "urlPattern": "/",
+      "description": "To be named in naming step",
       "blocks": [
         {
           "name": "carousel-hero",
@@ -134,6 +133,59 @@
           "style": null,
           "blocks": [
             "hero-banner"
+          ],
+          "defaultContent": []
+        }
+      ],
+      "urlPattern": "/"
+    },
+    {
+      "name": "resources",
+      "urls": [
+        "https://www.trpparts.com/resources/"
+      ],
+      "representativeUrl": "https://www.trpparts.com/resources/",
+      "description": "Resources library: H1, searchable and filterable list of resource documents and videos, Where To Buy strip",
+      "blocks": [
+        {
+          "name": "cards-resources",
+          "instances": [
+            "#resources-container",
+            "div.resources-grid"
+          ]
+        },
+        {
+          "name": "columns-retailer",
+          "instances": [
+            "section.retailer-search"
+          ]
+        }
+      ],
+      "urlPattern": "/*",
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Resources library",
+          "selector": [
+            "section.subpage-content"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-resources"
+          ],
+          "defaultContent": [
+            "#resourcesSearch h1"
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Where To Buy / Buy Online",
+          "selector": [
+            "section.retailer-search"
+          ],
+          "style": "red",
+          "blocks": [
+            "columns-retailer"
           ],
           "defaultContent": []
         }

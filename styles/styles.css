@@ -15,7 +15,6 @@
 :root {
   /* nav heights (fixed header: mobile bar + search toggle; desktop: utility + main + search rows) */
   --nav-height: 208px;
-  --breadcrumbs-height: 34px;
   --header-height: var(--nav-height);
 }
 
@@ -95,12 +94,6 @@ footer .footer[data-block-status="loaded"] {
 @media (width >= 1025px) {
   :root {
     --nav-height: 223px;
-  }
-}
-
-@media (width >= 900px) {
-  body[data-breadcrumbs] {
-    --header-height: calc(var(--nav-height) + var(--breadcrumbs-height));
   }
 }
 
@@ -261,6 +254,53 @@ main > .section > div {
 
 main > .section > .default-content-wrapper:has(> h2:first-child) {
   padding-top: var(--section-padding);
+}
+
+/* page title (subpages): the source sets it in the book weight, not the hero's bold */
+main > .section > .default-content-wrapper > h1 {
+  margin: 12px 0 8px;
+  font-weight: 400;
+  line-height: 44px;
+}
+
+/* breadcrumb (metadata breadcrumbs: true), desktop only like the source */
+main nav.breadcrumbs {
+  display: none;
+}
+
+/* breakpoint-exception: the source shows its breadcrumb from the desktop header breakpoint (1025px) */
+@media (width >= 1025px) {
+  main nav.breadcrumbs {
+    display: block;
+  }
+}
+
+main nav.breadcrumbs ol {
+  margin: 0;
+  padding: 10px 0 3px;
+  list-style: none;
+}
+
+main nav.breadcrumbs li {
+  display: inline-block;
+  color: var(--breadcrumb-color);
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+}
+
+main nav.breadcrumbs li + li::before {
+  content: '›';
+  margin: 0 7px;
+}
+
+main nav.breadcrumbs a:any-link {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+main nav.breadcrumbs a:hover,
+main nav.breadcrumbs a:focus-visible {
+  text-decoration: underline;
 }
 
 /* section metadata */

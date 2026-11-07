@@ -46,6 +46,14 @@ export default function transform(hookName, element, payload) {
       'button.slick-prev',
       'button.slick-next',
       '.slick-cloned',
+      // resources page UI the cards-resources block rebuilds (breadcrumb comes from page metadata):
+      // search box beside the H1, Refine-by sidebar, result counts/pagination, loading spinner
+      'nav.breadcrumbs',
+      '#resourcesSearch .resources-ui-wrapper',
+      '.parts-facet-wrapper',
+      '#pagination-header',
+      '#pagination-footer',
+      'img.part-loading-image',
       // non-content embeds
       'script',
       'noscript',

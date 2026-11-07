@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.trpparts.com/resources/",
+  "path": "resources/index",
+  "timestamp": "2026-11-07T17:09:46.856Z",
+  "title": "Resources",
+  "template": "resources",
+  "blocks": [
+    "cards-resources",
+    "columns-retailer"
+  ]
+}
