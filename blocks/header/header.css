@@ -58,11 +58,11 @@ header .nav-pickers {
   width: 100%;
 }
 
+/* each picker gets the width its label needs, then shares the remaining space */
 header .nav-picker {
   position: relative;
   z-index: 3;
-  flex: 1;
-  min-width: 0;
+  flex: 1 0 auto;
 }
 
 header .nav-picker:first-child:not(:last-child) {
@@ -119,11 +119,15 @@ header .nav-picker img {
   vertical-align: middle;
 }
 
+/* dropdowns are at least as wide as their trigger and grow to fit the widest entry */
 header .nav-picker-list {
   position: absolute;
   top: -999em;
   left: 0;
-  width: 100%;
+  box-sizing: border-box;
+  width: max-content;
+  min-width: 100%;
+  max-width: 100vw;
   background-color: #333;
   opacity: 0;
   transition: opacity 0.3s;
@@ -135,8 +139,11 @@ header .nav-picker-list.is-open {
 }
 
 header .nav-picker-list a:any-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 7px;
   padding: 8.75px;
+  white-space: nowrap;
   color: #fff;
   font-size: 14px;
   font-weight: 500;
@@ -148,6 +155,21 @@ header .nav-picker-list a:any-link {
 header .nav-picker-list a:hover,
 header .nav-picker-list a:focus-visible {
   background-color: #06539c;
+}
+
+header .nav-picker-list picture {
+  display: flex;
+  flex: none;
+}
+
+header .nav-picker-list img {
+  margin: 0 0 0 3.5px;
+}
+
+/* the right-hand picker opens toward the screen edge it sits against */
+header .nav-picker + .nav-picker .nav-picker-list {
+  right: 0;
+  left: auto;
 }
 
 header .nav-cta {
@@ -626,6 +648,11 @@ header .nav-search-select::after {
 
   header .nav-picker-list a:any-link {
     padding: 8.75px 14px;
+  }
+
+  header .nav-picker + .nav-picker .nav-picker-list {
+    right: auto;
+    left: 0;
   }
 
   header .nav-cta {
