@@ -1,0 +1,46 @@
+{
+  "variantName": "cards-offers",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-11-06T05:07:23.303Z",
+  "canonicalModel": "standalone",
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/",
+    "originPage": "TRP Parts homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "section": "TRP Parts Loyalty Offers",
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "image-only promotional offer tiles",
+    "imagePattern": "large",
+    "description": "Three image-only offer tiles"
+  },
+  "contentPattern": {
+    "structure": "one row per tile; cell 1 = offer image, cell 2 = optional single link (makes the whole tile clickable) or empty",
+    "buttonCount": 0,
+    "imageCount": 1,
+    "hasDescription": false,
+    "notes": "Offers change over time."
+  },
+  "options": [],
+  "memberVariantIds": [],
+  "reuseGuidance": {
+    "suitableFor": [
+      "coupon / deal artwork grids",
+      "image-only promo tiles"
+    ],
+    "notSuitableFor": [
+      "cards with title + body copy (use cards-promo)",
+      "category navigation tiles (use cards-category)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/index"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-06T05:07:23.303Z"
+  }
+}

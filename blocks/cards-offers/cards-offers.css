@@ -1,0 +1,86 @@
+/* cards-offers: image-only promo tiles (source: section.home-promo-boxes) */
+
+/* heading + "See All The Deals" default content around the block */
+main > .section.cards-offers-container > .default-content-wrapper:first-child {
+  padding-top: 8px;
+}
+
+main > .section.cards-offers-container > .default-content-wrapper:last-child {
+  padding-bottom: 8px;
+}
+
+main .cards-offers-container .default-content-wrapper h2 {
+  margin: 19.92px 0;
+  padding: 0 16px;
+  color: #333;
+  font-family: var(--condensed-font-family);
+  font-size: 24px;
+  font-weight: var(--condensed-font-weight);
+  line-height: 33px;
+}
+
+main .cards-offers-container .default-content-wrapper p.button-container {
+  display: block;
+  margin: 16px 0;
+  text-align: center;
+}
+
+/* the source row bleeds over the 16px content inset */
+main > .section > .cards-offers-wrapper {
+  padding: 0;
+}
+
+.cards-offers > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.cards-offers > ul > li {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 16px 0;
+  border-bottom: 8px solid #fff;
+  background-color: #00529b;
+  text-align: center;
+}
+
+.cards-offers .cards-offers-card-image {
+  padding: 16px;
+  line-height: 0;
+}
+
+.cards-offers .cards-offers-link {
+  display: block;
+}
+
+.cards-offers .cards-offers-card-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cards-offers .cards-offers-card-body {
+  padding: 0 16px;
+  color: #fff;
+}
+
+/* breakpoint-exception: source grid switches to 3 columns at 48em (768px) */
+@media (width >= 768px) {
+  .cards-offers > ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* breakpoint-exception: source desktop starts above 64em (1025px) */
+@media (width >= 1025px) {
+  .cards-offers > ul > li {
+    border-bottom: 0;
+    border-left: 3px solid #fff;
+    border-right: 3px solid #fff;
+  }
+}

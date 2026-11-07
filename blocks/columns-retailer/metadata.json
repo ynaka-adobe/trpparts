@@ -1,0 +1,45 @@
+{
+  "variantName": "columns-retailer",
+  "baseBlock": "columns",
+  "version": "1.0.0",
+  "created": "2026-11-06T05:07:23.303Z",
+  "canonicalModel": "standalone",
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/",
+    "originPage": "TRP Parts homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "section": "Where To Buy / Buy Online",
+    "colorScheme": "colored",
+    "density": "compact",
+    "purpose": "retailer locator search panel beside a buy-online CTA panel",
+    "description": "Two fixed side-by-side panels: Where To Buy retailer search (Nearby link, address search, distance radios) and Buy Online with CTA"
+  },
+  "contentPattern": {
+    "structure": "one row, two cells; cell 1 = H2 + link to /retailers (block renders address search + distance options), cell 2 = H2 + CTA link",
+    "buttonCount": 1,
+    "imageCount": 0,
+    "hasCTA": true,
+    "notes": "Any column containing a link to /retailers becomes the search panel; the form submits GET to that path with searchAddress and distance."
+  },
+  "options": [],
+  "memberVariantIds": [],
+  "reuseGuidance": {
+    "suitableFor": [
+      "where-to-buy / dealer locator entry points",
+      "two-panel search + CTA strips"
+    ],
+    "notSuitableFor": [
+      "generic multi-column text layouts (use columns)",
+      "full retailer results pages"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/index"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-06T05:07:23.303Z"
+  }
+}

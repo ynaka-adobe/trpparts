@@ -33,8 +33,14 @@
     ]
   },
   "usage": {
-    "pagesUsing": ["/en/catcorp"],
-    "reuseCount": 1,
-    "lastUsed": "2026-06-23T00:00:00.000Z"
-  }
+    "pagesUsing": [
+      "/en/catcorp",
+      "/index"
+    ],
+    "reuseCount": 2,
+    "lastUsed": "2026-11-06T05:03:55.069Z"
+  },
+  "canonicalModel": "standalone",
+  "options": [],
+  "memberVariantIds": []
 }

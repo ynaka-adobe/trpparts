@@ -1,0 +1,46 @@
+{
+  "variantName": "cards-video",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-11-06T05:07:23.303Z",
+  "canonicalModel": "standalone",
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/",
+    "originPage": "TRP Parts homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "section": "Product Profile Featured Videos",
+    "colorScheme": "light",
+    "density": "medium",
+    "purpose": "video cards that open a video player in a modal",
+    "imagePattern": "thumbnail",
+    "description": "Three video cards: bordered thumbnail + title + Watch Video link (opens video modal)"
+  },
+  "contentPattern": {
+    "structure": "one row per card; cell 1 = video thumbnail image, cell 2 = title paragraph + Watch Video link (YouTube or Vimeo URL)",
+    "buttonCount": 0,
+    "imageCount": 1,
+    "hasDescription": false,
+    "notes": "Thumbnail and link both open the video in the shared modal; non-video links behave normally."
+  },
+  "options": [],
+  "memberVariantIds": [],
+  "reuseGuidance": {
+    "suitableFor": [
+      "featured product videos",
+      "video libraries / tutorials grids"
+    ],
+    "notSuitableFor": [
+      "inline auto-playing video (use video/embed)",
+      "cards without a video link"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/index"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-06T05:07:23.303Z"
+  }
+}

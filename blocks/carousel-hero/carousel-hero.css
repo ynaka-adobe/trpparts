@@ -1,0 +1,276 @@
+/* carousel-hero: rotating hero slides (full-bleed slide image + H1 + CTA overlaid on the left) */
+
+/* full content-column width: no inset, the slide spans the white 1200px column */
+main > .section > .carousel-hero-wrapper {
+  max-width: 100%;
+  padding: 0;
+}
+
+.carousel-hero {
+  position: relative;
+}
+
+.carousel-hero .carousel-hero-slides-container {
+  position: relative;
+}
+
+.carousel-hero .carousel-hero-slides,
+.carousel-hero .carousel-hero-indicators {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.carousel-hero .carousel-hero-slides {
+  display: flex;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  overflow: scroll clip;
+  scrollbar-width: none;
+}
+
+.carousel-hero .carousel-hero-slides::-webkit-scrollbar {
+  display: none;
+}
+
+/* slide = source .billboard-flex-container (mobile values from source max-width: 400px) */
+.carousel-hero .carousel-hero-slide {
+  position: relative;
+  flex: 0 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 180px;
+  aspect-ratio: 1200 / 420;
+  padding: 12px 16px;
+  scroll-snap-align: start;
+}
+
+.carousel-hero .carousel-hero-slide-image picture {
+  position: absolute;
+  inset: 0;
+}
+
+.carousel-hero .carousel-hero-slide-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 70% center;
+}
+
+/* text column = source .billboard-text-wrap */
+.carousel-hero .carousel-hero-slide-content {
+  position: relative;
+  z-index: 1;
+  max-width: 30%;
+  color: #000;
+}
+
+/* heading = source h1.billboard-h1 */
+.carousel-hero .carousel-hero-slide-content h1,
+.carousel-hero .carousel-hero-slide-content h2 {
+  margin: 0 0 10px;
+  color: #000;
+  font-family: var(--heading-font-family);
+  font-size: 0.8rem;
+  font-weight: var(--display-font-weight);
+  line-height: 1;
+  letter-spacing: -0.95px;
+  text-transform: uppercase;
+}
+
+.carousel-hero .carousel-hero-slide-content sup {
+  position: relative;
+  top: -0.25em;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+/* CTA paragraph = source p.hero-button */
+.carousel-hero .carousel-hero-slide-content p {
+  margin: 0;
+  font-size: 1.25em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.carousel-hero .carousel-hero-slide-content .button-container {
+  display: block;
+}
+
+/* CTA = source a.button.redCTA */
+main .carousel-hero .carousel-hero-slide-content a.button:any-link {
+  display: inline-block;
+  margin: 0.65em 0 0;
+  padding: 4px 8px;
+  border: 1px solid var(--brand-red-dark);
+  border-radius: 3px;
+  background-color: var(--brand-red-dark);
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+  transition: background-color 0.2s ease-in-out;
+}
+
+main .carousel-hero .carousel-hero-slide-content a.button:focus {
+  border-color: #fff;
+  background-color: var(--button-hover-background);
+  color: #092d4c;
+}
+
+main .carousel-hero .carousel-hero-slide-content a.button:hover {
+  border-color: #fff;
+  background-color: #ba1a0e;
+  color: #fff;
+}
+
+/* slide dots = source .slick-dots (overlaid at the slide bottom) */
+.carousel-hero .carousel-hero-indicators {
+  position: absolute;
+  bottom: 1em;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  line-height: 0;
+}
+
+.carousel-hero .carousel-hero-indicator button {
+  box-sizing: border-box;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
+  border: 2px solid #000;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: transparent;
+  transition: color 0.3s, background-color 0.3s, border 0.3s;
+}
+
+.carousel-hero .carousel-hero-indicator button:disabled,
+.carousel-hero .carousel-hero-indicator button:hover,
+.carousel-hero .carousel-hero-indicator button:focus-visible {
+  background-color: #000;
+}
+
+.carousel-hero .carousel-hero-navigation {
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.carousel-hero .carousel-hero-navigation button {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background-color: rgb(0 0 0 / 25%);
+}
+
+.carousel-hero .carousel-hero-navigation button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 2px);
+  width: 10px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-bottom: 0;
+  border-left: 0;
+  transform: translate(-50%, -50%) rotate(-135deg);
+}
+
+.carousel-hero .carousel-hero-navigation .carousel-hero-next::after {
+  left: calc(50% - 2px);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* breakpoint-exception: source billboard steps up above 400px (max-width: 600px rules) */
+@media (width >= 401px) {
+  .carousel-hero .carousel-hero-slide {
+    min-height: 220px;
+  }
+
+  main .carousel-hero .carousel-hero-slide-content a.button:any-link {
+    padding: 5px 10px;
+    font-size: 0.5rem;
+  }
+}
+
+/* breakpoint-exception: source billboard tablet layout above 600px (max-width: 900px rules) */
+@media (width >= 601px) {
+  .carousel-hero .carousel-hero-slide {
+    min-height: 320px;
+    padding: 30px;
+  }
+
+  .carousel-hero .carousel-hero-slide-image img {
+    object-position: center center;
+  }
+
+  .carousel-hero .carousel-hero-slide-content {
+    max-width: 42%;
+  }
+
+  .carousel-hero .carousel-hero-slide-content h1,
+  .carousel-hero .carousel-hero-slide-content h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    line-height: 0.95;
+  }
+
+  main .carousel-hero .carousel-hero-slide-content a.button:any-link {
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+  }
+}
+
+/* breakpoint-exception: source billboard desktop layout above 900px */
+@media (width >= 901px) {
+  .carousel-hero .carousel-hero-slide {
+    min-height: auto;
+    padding: 8% 5% 8% 3%;
+  }
+
+  .carousel-hero .carousel-hero-slide-content {
+    max-width: 45%;
+  }
+
+  .carousel-hero .carousel-hero-slide-content h1,
+  .carousel-hero .carousel-hero-slide-content h2 {
+    margin-bottom: 16px;
+  }
+
+  main .carousel-hero .carousel-hero-slide-content a.button:any-link {
+    padding: 12px 28px;
+    font-size: 0.875rem;
+  }
+}

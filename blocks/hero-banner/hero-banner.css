@@ -6,6 +6,7 @@
 
 .hero-banner {
   position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -15,14 +16,28 @@
   color: var(--background-color);
 }
 
-/* background photo */
-.hero-banner picture {
+.hero-banner > div {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* background photo: only the dedicated background row (set by hero-banner.js) */
+.hero-banner > .hero-banner-background {
   position: absolute;
   inset: 0;
   z-index: -2;
+  max-width: none;
 }
 
-.hero-banner picture img {
+.hero-banner > .hero-banner-background > div,
+.hero-banner > .hero-banner-background picture {
+  display: block;
+  height: 100%;
+}
+
+.hero-banner > .hero-banner-background img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -35,12 +50,6 @@
   inset: 0;
   z-index: -1;
   background: linear-gradient(90deg, rgb(0 0 0 / 70%) 0%, rgb(0 0 0 / 35%) 55%, rgb(0 0 0 / 10%) 100%);
-}
-
-.hero-banner > div {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
 }
 
 .hero-banner h1,
@@ -71,9 +80,137 @@
   border-radius: var(--border-radius);
 }
 
+/*
+ * Background row + content row that starts with a media item (e.g. logo):
+ * light photo, dark text, media column beside a text column.
+ */
+.hero-banner.hero-banner-has-media {
+  height: auto;
+  justify-content: normal;
+  padding: 48px 48px 32px;
+  color: var(--text-color);
+}
+
+.hero-banner.hero-banner-has-media::after {
+  content: none;
+}
+
+.hero-banner.hero-banner-has-media > .hero-banner-background img {
+  object-position: left top;
+}
+
+.hero-banner.hero-banner-has-media > .hero-banner-content {
+  max-width: none;
+}
+
+.hero-banner .hero-banner-split {
+  margin: 0 -16px;
+}
+
+.hero-banner .hero-banner-media,
+.hero-banner .hero-banner-text {
+  box-sizing: border-box;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.hero-banner .hero-banner-media > p,
+.hero-banner .hero-banner-media > picture {
+  display: block;
+  max-width: none;
+  margin: 0;
+}
+
+.hero-banner.hero-banner-has-media .hero-banner-media img {
+  vertical-align: bottom;
+}
+
+.hero-banner.hero-banner-has-media .hero-banner-text h2 {
+  max-width: 80%;
+  margin: 0 auto 0.83em;
+  color: var(--text-color);
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  font-size: var(--heading-font-size-xl);
+  line-height: 1.375;
+}
+
+.hero-banner.hero-banner-has-media .hero-banner-text p {
+  display: block;
+  max-width: none;
+  margin: 18px 0;
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: 0.18px;
+}
+
+.hero-banner.hero-banner-has-media .hero-banner-text sup {
+  position: relative;
+  top: -0.25em;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+main .hero-banner.hero-banner-has-media a.button:any-link {
+  display: inline-block;
+  box-sizing: border-box;
+  min-width: 208px;
+  max-width: 100%;
+  margin: 0;
+  padding: 4px 24px;
+  border: 1px solid var(--brand-blue);
+  border-radius: 5px;
+  background-color: var(--brand-blue);
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+main .hero-banner.hero-banner-has-media a.button:hover,
+main .hero-banner.hero-banner-has-media a.button:focus {
+  background-color: var(--button-hover-background);
+  color: var(--brand-blue);
+}
+
 @media (width >= 900px) {
   .hero-banner {
     height: 536px;
     padding: 64px 32px;
+  }
+
+  .hero-banner.hero-banner-has-media {
+    height: auto;
+    padding: 48px 48px 32px;
+  }
+}
+
+/* breakpoint-exception: source splits media/text columns at 48em (768px) */
+@media (width >= 768px) {
+  .hero-banner .hero-banner-split {
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-banner .hero-banner-media {
+    flex: 0 0 41.667%;
+    max-width: 41.667%;
+  }
+
+  .hero-banner .hero-banner-text {
+    flex: 0 0 50%;
+    max-width: 50%;
+    text-align: left;
+  }
+
+  .hero-banner.hero-banner-has-media .hero-banner-text h2 {
+    margin-left: 0;
+    margin-right: 0;
   }
 }

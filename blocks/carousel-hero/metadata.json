@@ -1,0 +1,46 @@
+{
+  "variantName": "carousel-hero",
+  "baseBlock": "carousel",
+  "version": "1.0.0",
+  "created": "2026-11-06T05:07:23.303Z",
+  "canonicalModel": "standalone",
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/",
+    "originPage": "TRP Parts homepage",
+    "blockPosition": "top"
+  },
+  "visualCharacteristics": {
+    "section": "Hero carousel",
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "rotating hero banner slides (background image + H1 + CTA)",
+    "imagePattern": "large",
+    "description": "Rotating hero slides: banner image + H1 + LEARN MORE CTA, dot navigation, auto-advance"
+  },
+  "contentPattern": {
+    "structure": "one row per slide; cell 1 = slide image, cell 2 = H1 heading + CTA link",
+    "buttonCount": 1,
+    "imageCount": 1,
+    "hasCTA": true,
+    "notes": "Slide count changes over time; single-slide blocks render without controls."
+  },
+  "options": [],
+  "memberVariantIds": [],
+  "reuseGuidance": {
+    "suitableFor": [
+      "homepage hero rotators",
+      "rotating campaign banners with heading + CTA"
+    ],
+    "notSuitableFor": [
+      "a single static hero (use hero-banner)",
+      "product image galleries"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/index"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-06T05:07:23.303Z"
+  }
+}

@@ -29,8 +29,11 @@ import {
 function buildHeroBlock(main) {
   const h1 = main.querySelector('h1');
   const picture = main.querySelector('picture');
-  // eslint-disable-next-line no-bitwise
-  if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
+  // skip when the heading or image already belongs to an authored block
+  const inBlock = (el) => el.closest('main > div > div[class]');
+  if (h1 && picture && !inBlock(h1) && !inBlock(picture)
+    // eslint-disable-next-line no-bitwise
+    && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
     const section = document.createElement('div');
     section.append(buildBlock('hero', { elems: [picture, h1] }));
     main.prepend(section);
@@ -151,6 +154,8 @@ async function loadEager(doc) {
   }
   const main = doc.querySelector('main');
   if (main) {
+    // the first image in main is the LCP candidate: raise its priority before decoration
+    main.querySelector('img')?.setAttribute('fetchpriority', 'high');
     decorateMain(main);
     doc.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);

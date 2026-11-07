@@ -1,0 +1,101 @@
+/* cards-video: thumbnail + title + Watch Video link, opens video in a modal */
+
+/* section heading (default content above the block): condensed face, 32px inset */
+.cards-video-container .default-content-wrapper h2 {
+  /* source: 32px section padding + 0.83em h2 margin, minus the global 40px wrapper padding */
+  margin: calc(32px + 0.83em - var(--section-padding)) 0 0.83em;
+  padding: 0 16px;
+  font-family: var(--condensed-font-family);
+  font-size: 24px;
+  font-weight: var(--condensed-font-weight);
+  line-height: 33px;
+}
+
+.cards-video-container .default-content-wrapper h2 sup {
+  position: relative;
+  top: -0.25em;
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.cards-video > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 32px;
+}
+
+.cards-video > ul > li {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px 0;
+}
+
+.cards-video .cards-video-card-image {
+  line-height: 0;
+}
+
+.cards-video .cards-video-card-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cards-video .cards-video-thumbnail {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.cards-video .cards-video-card-body {
+  margin-top: 16px;
+  color: var(--text-color);
+  font-size: var(--body-font-size-m);
+  line-height: 25.6px;
+}
+
+.cards-video .cards-video-card-body p {
+  margin: 0;
+}
+
+main .cards-video a.cards-video-link:any-link {
+  color: var(--link-color);
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+main .cards-video a.cards-video-link:hover,
+main .cards-video a.cards-video-link:focus {
+  color: var(--link-hover-color);
+  text-decoration: none;
+}
+
+/* modal player (rendered inside the shared modal dialog) */
+.cards-video-player {
+  position: relative;
+  width: min(90vw, 960px);
+  aspect-ratio: 16 / 9;
+}
+
+.cards-video-player iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* breakpoint-exception: source grid switches to 3 columns at 48em (768px) */
+@media (width >= 768px) {
+  .cards-video > ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

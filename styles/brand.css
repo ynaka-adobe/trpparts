@@ -1,0 +1,43 @@
+/* trpparts.com brand tokens (extracted from the source site) */
+:root {
+  /* colors */
+  --background-color: #fff;
+  --page-background-color: #f8f8f8;
+  --light-color: #e8e8e8;
+  --dark-color: #333;
+  --text-color: #333;
+  --link-color: #06539c;
+  --link-hover-color: #b51c16;
+  --brand-blue: #06539c;
+  --brand-blue-light: #1f6ebb;
+  --brand-red: #ca1f18;
+  --brand-red-dark: #b0140c;
+  --button-hover-background: #f4f4f4;
+  --border-color: #d0d0d0;
+
+  /* fonts: Libre Franklin / Archivo Narrow stand in for the licensed Franklin Gothic URW faces */
+  --body-font-family: arial, helvetica, sans-serif;
+  --heading-font-family: 'Libre Franklin', libre-franklin-fallback, arial, helvetica, sans-serif;
+  --heading-font-weight: 500;
+  --display-font-weight: 700;
+  --condensed-font-family: 'Archivo Narrow', archivo-narrow-fallback, 'Arial Narrow', arial, sans-serif;
+  --condensed-font-weight: 500;
+
+  /* body sizes */
+  --body-font-size-m: 16px;
+  --body-font-size-s: 14px;
+  --body-font-size-xs: 12px;
+
+  /* heading sizes */
+  --heading-font-size-xxl: 32px;
+  --heading-font-size-xl: 24px;
+  --heading-font-size-l: 18.72px;
+  --heading-font-size-m: 16px;
+  --heading-font-size-s: 13.28px;
+  --heading-font-size-xs: 10.72px;
+
+  /* layout */
+  --content-max-width: 1200px;
+  --content-inset: 16px;
+  --section-padding: 40px;
+}

@@ -1,0 +1,12 @@
+{
+  "type": "da",
+  "sites": {
+    "trpparts": {
+      "previewOrg": "ynaka-adobe",
+      "previewSite": "trpparts",
+      "contentHostUrl": "https://content.da.live/ynaka-adobe/trpparts/",
+      "libraryUrl": "https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json",
+      "botProtected": true
+    }
+  }
+}
