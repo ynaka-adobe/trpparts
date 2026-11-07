@@ -1,0 +1,46 @@
+{
+  "variantName": "cards-downloads",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-11-07T19:12:34.000Z",
+  "canonicalModel": "standalone",
+  "options": [],
+  "memberVariantIds": [],
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/media-center/",
+    "originPage": "TRP Media Center",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "section": "TRP Downloads",
+    "colorScheme": "light",
+    "density": "medium",
+    "purpose": "downloadable images (wallpapers, calendars) with one link per size",
+    "imagePattern": "thumbnail",
+    "description": "Left-aligned wrapping grid of ~345px cards: image on top, title, then format rows laid out as a 3-column grid (label | size link | size link)."
+  },
+  "contentPattern": {
+    "structure": "one row per downloadable; cell 1 = image; cell 2 = title paragraph, then one paragraph per format: the label text followed by its size links (e.g. Desktop 1920x1080 1024x768)",
+    "buttonCount": 0,
+    "imageCount": 1,
+    "hasDescription": false,
+    "notes": "A paragraph holding only links continues the previous format row. Size links get an accessible name \"<title> <label> <size> Download\" unless authored with one."
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "wallpaper / calendar / asset downloads offered in several sizes or formats"
+    ],
+    "notSuitableFor": [
+      "single-link cards (use cards)",
+      "video cards (use cards-video)",
+      "document libraries with search (use cards-resources)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/media-center"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-07T19:12:34.000Z"
+  }
+}

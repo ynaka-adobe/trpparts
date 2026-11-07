@@ -140,12 +140,112 @@
       "urlPattern": "/"
     },
     {
+      "name": "media-center",
+      "urls": [
+        "https://www.trpparts.com/media-center/"
+      ],
+      "representativeUrl": "https://www.trpparts.com/media-center/",
+      "description": "Media Center: H1, recent articles and recent press releases side by side, featured downloads, Where To Buy strip",
+      "blocks": [
+        {
+          "name": "cards-articles",
+          "instances": [
+            ".media-center .media-column > ul.media-items:not(.featured-downloads)"
+          ]
+        },
+        {
+          "name": "cards-downloads",
+          "instances": [
+            "ul.media-items.featured-downloads"
+          ]
+        },
+        {
+          "name": "columns-retailer",
+          "instances": [
+            "section.retailer-search"
+          ]
+        }
+      ],
+      "urlPattern": "/*",
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Page title",
+          "selector": [
+            "section.subpage-content"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "section.subpage-content h1"
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Recent Articles",
+          "selector": [
+            ".media-center > .row:first-child > .media-column:nth-child(1)"
+          ],
+          "style": "half",
+          "blocks": [
+            "cards-articles"
+          ],
+          "defaultContent": [
+            ".media-center > .row:first-child > .media-column:nth-child(1) > h2",
+            ".media-center > .row:first-child > .media-column:nth-child(1) .media-mobile a.button"
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Recent Press Releases",
+          "selector": [
+            ".media-center > .row:first-child > .media-column:nth-child(2)"
+          ],
+          "style": "half",
+          "blocks": [
+            "cards-articles"
+          ],
+          "defaultContent": [
+            ".media-center > .row:first-child > .media-column:nth-child(2) > h2",
+            ".media-center > .row:first-child > .media-column:nth-child(2) .media-mobile a.button"
+          ]
+        },
+        {
+          "id": "section-4",
+          "name": "TRP Downloads",
+          "selector": [
+            ".media-center > .row.media-column"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-downloads"
+          ],
+          "defaultContent": [
+            ".media-center > .row.media-column h2",
+            ".media-center > .row[style] a.button"
+          ]
+        },
+        {
+          "id": "section-5",
+          "name": "Where To Buy / Buy Online",
+          "selector": [
+            "section.retailer-search"
+          ],
+          "style": "red",
+          "blocks": [
+            "columns-retailer"
+          ],
+          "defaultContent": []
+        }
+      ]
+    },
+    {
       "name": "resources",
       "urls": [
         "https://www.trpparts.com/resources/"
       ],
       "representativeUrl": "https://www.trpparts.com/resources/",
-      "description": "Resources library: H1, searchable and filterable list of resource documents and videos, Where To Buy strip",
+      "description": "To be named in naming step",
       "blocks": [
         {
           "name": "cards-resources",
@@ -161,7 +261,6 @@
           ]
         }
       ],
-      "urlPattern": "/*",
       "sections": [
         {
           "id": "section-1",
@@ -189,7 +288,8 @@
           ],
           "defaultContent": []
         }
-      ]
+      ],
+      "urlPattern": "/*"
     }
   ]
 }
