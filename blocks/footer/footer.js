@@ -7,8 +7,15 @@ const SECTION_ROLES = ['start', 'end', 'legal', 'backtotop'];
  * @returns {Promise<HTMLElement|null>}
  */
 async function fetchFooter() {
-  let resp = await fetch('/content/footer.plain.html');
-  if (!resp.ok) resp = await fetch('/footer.plain.html');
+  // the local preview serves fragments from /content; Edge Delivery serves them at the site
+  // root, so only try /content locally (avoids a 404 on every production page view)
+  let resp;
+  if (['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+    resp = await fetch('/content/footer.plain.html');
+    if (!resp.ok) resp = await fetch('/footer.plain.html');
+  } else {
+    resp = await fetch('/footer.plain.html');
+  }
   if (!resp.ok) return null;
   const wrapper = document.createElement('div');
   wrapper.innerHTML = await resp.text();
