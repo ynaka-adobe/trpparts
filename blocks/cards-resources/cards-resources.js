@@ -38,6 +38,26 @@ function compareTypes(a, b) {
   return a.localeCompare(b, 'en');
 }
 
+/**
+ * Thumbnail of a resource derived from its link, as the source site does: PDFs on the asset
+ * server have a cover image at the same name under /thumbnail/, YouTube videos have mqdefault.
+ * Authors can still add their own image to a card; this covers cards without one (a page may
+ * hold at most 200 images, fewer than the resource list has).
+ * @param {string} href resource link
+ * @param {string|null} embedUrl video embed URL, if the link is a video
+ * @returns {string|null}
+ */
+function thumbnailFor(href, embedUrl) {
+  if (embedUrl) {
+    const [, id] = new URL(embedUrl).pathname.match(/^\/embed\/([^/]+)/) || [];
+    return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : null;
+  }
+  const url = new URL(href, window.location.href);
+  if (url.hostname !== 'assets.trpparts.com' || !/^\/raw\/.+\.pdf$/i.test(url.pathname)) return null;
+  url.pathname = url.pathname.replace(/^\/raw\//, '/thumbnail/');
+  return url.href;
+}
+
 let videoCssLoaded;
 async function playVideo(embedUrl, title) {
   // the player styles live in the cards-video stylesheet
@@ -108,6 +128,24 @@ function buildItem(row) {
     }
     if (a.classList.contains('button')) a.classList.add('cards-resources-cta');
   });
+
+  // no authored image: use the resource's own thumbnail
+  if (primary && !image.querySelector('picture, img')) {
+    const src = thumbnailFor(primary.href, embedUrl);
+    if (src) {
+      // loading is set before src so a detached card never starts an eager download
+      const img = el('img', { loading: 'lazy', alt: '' });
+      img.src = src;
+      // drop the thumbnail when it fails (e.g. a removed video, whose placeholder is 120px wide)
+      const drop = () => {
+        image.replaceChildren();
+        image.classList.add('cards-resources-card-image-empty');
+      };
+      img.addEventListener('error', drop);
+      img.addEventListener('load', () => { if (embedUrl && img.naturalWidth <= 120) drop(); });
+      image.append(el('p', {}, img));
+    }
+  }
 
   // the thumbnail links to the resource too (unless authored with its own link)
   const picture = image.querySelector('picture, img');

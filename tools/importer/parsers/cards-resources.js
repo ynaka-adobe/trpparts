@@ -5,9 +5,9 @@
  * Parser for cards-resources.
  * Source: #resources-container.resources-grid, items = :scope > .resources-item
  * (data-type, data-brand attributes; PDF items and YouTube video items).
- * One row per item:
- *   cell 1 = thumbnail image (unwrapped from its link), '' when missing
- *   cell 2 = <h2><a>title</a></h2>, optional description <p>,
+ * One row (single cell) per item - no image: the block derives each thumbnail from the
+ * resource link, as the source does (a page may hold at most 200 images; there are 564 items):
+ *   <h2><a>title</a></h2>, optional description <p>,
  *            <p><a>Download|Watch Video</a></p>,
  *            <p>Type: <type> | Brand: <brand></p> (brand without trailing " [CODE]")
  */
@@ -29,16 +29,6 @@ export default function parse(element, { document }) {
   if (!items.length) items = [...element.querySelectorAll('.resources-item')];
 
   items.forEach((item) => {
-    // Image cell
-    let imageCell = '';
-    const img = item.querySelector('img');
-    if (img) {
-      const newImg = document.createElement('img');
-      newImg.src = img.getAttribute('src') || '';
-      newImg.alt = img.getAttribute('alt') || '';
-      imageCell = newImg;
-    }
-
     // Title
     const titleLink = item.querySelector('h2 a[href]');
     const titleH2 = item.querySelector('h2');
@@ -81,7 +71,7 @@ export default function parse(element, { document }) {
     tag.textContent = `Type: ${type} | Brand: ${brand}`;
     content.push(tag);
 
-    cells.push([imageCell, content]);
+    cells.push([content]);
   });
 
   const block = WebImporter.Blocks.createBlock(document, { name: 'cards-resources', cells });

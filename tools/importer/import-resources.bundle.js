@@ -56,14 +56,6 @@ var CustomImportScript = (() => {
     let items = [...element.querySelectorAll(":scope > .resources-item")];
     if (!items.length) items = [...element.querySelectorAll(".resources-item")];
     items.forEach((item) => {
-      let imageCell = "";
-      const img = item.querySelector("img");
-      if (img) {
-        const newImg = document2.createElement("img");
-        newImg.src = img.getAttribute("src") || "";
-        newImg.alt = img.getAttribute("alt") || "";
-        imageCell = newImg;
-      }
       const titleLink = item.querySelector("h2 a[href]");
       const titleH2 = item.querySelector("h2");
       const title = cleanText((titleLink || titleH2 || {}).textContent);
@@ -97,7 +89,7 @@ var CustomImportScript = (() => {
       const tag = document2.createElement("p");
       tag.textContent = `Type: ${type} | Brand: ${brand}`;
       content.push(tag);
-      cells.push([imageCell, content]);
+      cells.push([content]);
     });
     const block = WebImporter.Blocks.createBlock(document2, { name: "cards-resources", cells });
     element.replaceWith(block);
