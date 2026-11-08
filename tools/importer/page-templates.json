@@ -605,6 +605,88 @@
           "defaultContent": []
         }
       ]
+    },
+    {
+      "name": "local-deals",
+      "urls": [
+        "https://www.trpparts.com/local-deals/"
+      ],
+      "representativeUrl": "https://www.trpparts.com/local-deals/",
+      "description": "Local Deals: promo banner, closest-retailer panel (generic, links to the personalized page on trpparts.com), Performance Membership offers, Where To Buy strip",
+      "blocks": [
+        {
+          "name": "hero-banner",
+          "instances": [
+            "div.hero-banner.large"
+          ]
+        },
+        {
+          "name": "cards-member-offers",
+          "instances": [
+            ".specials-box"
+          ]
+        },
+        {
+          "name": "columns-retailer",
+          "instances": [
+            "section.retailer-search"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Get Local Deals banner",
+          "selector": [
+            "div.hero-banner.large"
+          ],
+          "style": "red-gradient",
+          "blocks": [
+            "hero-banner"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-2",
+          "name": "Your Closest Retailer",
+          "selector": [
+            "section.subpage-content"
+          ],
+          "style": "divider",
+          "blocks": [],
+          "defaultContent": [
+            "section.subpage-content h1",
+            "section.subpage-content h1 ~ p"
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Performance Membership offers",
+          "selector": [
+            ".local-deals-cta"
+          ],
+          "style": "centered, condensed-headings",
+          "blocks": [
+            "cards-member-offers"
+          ],
+          "defaultContent": [
+            ".local-deals-cta h2",
+            ".local-deals-cta p"
+          ]
+        },
+        {
+          "id": "section-4",
+          "name": "Where To Buy / Buy Online",
+          "selector": [
+            "section.retailer-search"
+          ],
+          "style": "red",
+          "blocks": [
+            "columns-retailer"
+          ],
+          "defaultContent": []
+        }
+      ]
     }
   ]
 }

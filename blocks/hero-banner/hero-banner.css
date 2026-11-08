@@ -246,6 +246,12 @@ main .hero-banner.hero-banner-has-media a.button:focus {
   text-align: center;
 }
 
+/* a short promo (title + one line, e.g. local deals) starts one blank line down, as the source
+   does with an empty spacer paragraph; the offsets are the source's at each width */
+.hero-banner.hero-banner-columns .hero-banner-text:not(:has(> :nth-child(3))) {
+  padding-top: 43px;
+}
+
 .hero-banner.hero-banner-columns .hero-banner-text p {
   max-width: none;
   margin: 0;
@@ -261,14 +267,19 @@ main .hero-banner.hero-banner-has-media a.button:focus {
   font-weight: var(--display-font-weight);
 }
 
-.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2) {
+/* the big offer figure ("$3,500"): a second line that opens with a raised "$"; a plain second line
+   (local deals: "made just for you.") is styled like the other text lines */
+.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2):has(> sup) {
   font-family: var(--heading-font-family);
   font-size: 64px;
   font-weight: var(--display-font-weight);
 }
 
-.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(n + 3) {
-  margin: 0.5em 0;
+/* stylelint-disable-next-line no-descending-specificity -- different paragraphs from the offer-line rules */
+.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(n + 3),
+.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2):not(:has(> sup)) {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .hero-banner.hero-banner-columns .hero-banner-text sup {
@@ -279,7 +290,7 @@ main .hero-banner.hero-banner-has-media a.button:focus {
   vertical-align: baseline;
 }
 
-.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2) sup {
+.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2):has(> sup) sup {
   top: -0.375em;
   font-size: 62.5%;
 }
@@ -346,6 +357,10 @@ main .hero-banner.hero-banner-columns a.button:focus {
   .hero-banner.hero-banner-columns .hero-banner-text > p:first-child {
     font-size: 34px;
   }
+
+  .hero-banner.hero-banner-columns .hero-banner-text:not(:has(> :nth-child(3))) {
+    padding-top: 23px;
+  }
 }
 
 /* breakpoint-exception: source enlarges the promo text above 1024px */
@@ -358,7 +373,11 @@ main .hero-banner.hero-banner-columns a.button:focus {
     font-size: 46px;
   }
 
-  .hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2) {
+  .hero-banner.hero-banner-columns .hero-banner-text:not(:has(> :nth-child(3))) {
+    padding-top: 49px;
+  }
+
+  .hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2):has(> sup) {
     font-size: 112px;
   }
 

@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "url": "https://www.trpparts.com/local-deals/",
+  "path": "local-deals/index",
+  "timestamp": "2026-11-08T16:39:00.039Z",
+  "title": "Your Closest Retailer",
+  "template": "local-deals",
+  "blocks": [
+    "hero-banner",
+    "cards-member-offers",
+    "columns-retailer"
+  ]
+}

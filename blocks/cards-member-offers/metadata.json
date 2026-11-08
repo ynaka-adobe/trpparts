@@ -1,0 +1,49 @@
+{
+  "variantName": "cards-member-offers",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-11-08T00:00:00.000Z",
+  "canonicalModel": "standalone",
+  "options": [],
+  "memberVariantIds": [],
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/local-deals/",
+    "originPage": "TRP Local Deals",
+    "blockPosition": "bottom"
+  },
+  "visualCharacteristics": {
+    "sections": [
+      "Performance Membership offers"
+    ],
+    "colorScheme": "light",
+    "density": "medium",
+    "purpose": "teaser of a few current, time-limited membership offers",
+    "imagePattern": "product image",
+    "description": "3 offer cards in a row with thin grey vertical dividers between them: product image centered on top, then a large red amount with superscript $ and smaller OFF, the uppercase product name (condensed font), and \"Valid until M/D/YYYY\"; 3 per row on desktop, 2 on tablet, 1 on mobile (dividers become horizontal when stacked)."
+  },
+  "contentPattern": {
+    "structure": "one row per offer; cell 1 = offer image (alt = product name); cell 2 = three paragraphs: the amount (\"<sup>$</sup>3.00 OFF\"), the product title, and \"Valid until M/D/YYYY\"",
+    "buttonCount": 0,
+    "imageCount": 1,
+    "hasDescription": false,
+    "notes": "Text lines are recognized by pattern, so their order doesn't matter: the line ending in OFF is the amount, the line starting with \"Valid until\" is the validity, the remaining line is the title. The trailing OFF is wrapped in a span and sized smaller. An empty image alt falls back to the title. The heading, intro and Sign Up button above stay default content."
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "membership / loyalty offer teasers",
+      "coupon-style cards: product image, discount amount, product name, expiry"
+    ],
+    "notSuitableFor": [
+      "image-only promo tiles (use cards-offers)",
+      "dealer ad squares (use cards-deals)",
+      "article lists (use cards-articles)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/local-deals/index"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-08T00:00:00.000Z"
+  }
+}

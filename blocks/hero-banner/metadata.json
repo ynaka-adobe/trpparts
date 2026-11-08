@@ -34,10 +34,11 @@
     "pagesUsing": [
       "/en/catcorp",
       "/index",
-      "/performance-membership/index"
+      "/performance-membership/index",
+      "/local-deals/index"
     ],
-    "reuseCount": 3,
-    "lastUsed": "2026-11-08T01:10:00.000Z"
+    "reuseCount": 4,
+    "lastUsed": "2026-11-08T16:15:00.000Z"
   },
   "canonicalModel": "standalone",
   "options": [],

@@ -349,6 +349,7 @@ var CustomImportScript = (() => {
     "aria-describedby"
   ];
   function transform(hookName, element, payload) {
+    var _a, _b;
     if (hookName === "beforeTransform") {
       removeAll(element, [".media-center > .row.media-desktop"]);
       removeAll(element, [".container-fluid:has(> .row.performance-line)", ".row.performance-line"]);
@@ -361,6 +362,22 @@ var CustomImportScript = (() => {
         aboutRows[0].before(bands);
         bands.append(...aboutRows);
       }
+      const retailerDetail = element.querySelector("#retailer-detail");
+      if (retailerDetail) {
+        const doc = retailerDetail.ownerDocument;
+        (_b = (_a = element.querySelector("h2#special-offers")) == null ? void 0 : _a.closest(".row")) == null ? void 0 : _b.remove();
+        const intro = doc.createElement("p");
+        intro.textContent = "Local deals vary by TRP retailer. See the current deals at the TRP retailer closest to you.";
+        const cta = doc.createElement("p");
+        const link = doc.createElement("a");
+        link.href = "https://www.trpparts.com/local-deals/";
+        link.textContent = "Find Your Local Deals";
+        cta.append(link);
+        retailerDetail.replaceWith(intro, cta);
+      }
+      element.querySelectorAll(".hero-banner.large p").forEach((p) => {
+        if (!p.textContent.trim() && !p.querySelector("img, picture, a")) p.remove();
+      });
       const MIGRATED = [
         "/",
         "/resources/",
@@ -398,7 +415,8 @@ var CustomImportScript = (() => {
         '.performance-list a[href^="/"]',
         '.header-content-wrapper a[href^="/"]',
         '#offer-search .local-deals a[href^="/"]',
-        '.about-us a[href^="/"]'
+        '.about-us a[href^="/"]',
+        '.local-deals-cta a[href^="/"]'
       ].join(", ")).forEach((a) => {
         a.setAttribute("href", new URL(a.getAttribute("href"), "https://www.trpparts.com/").href);
       });

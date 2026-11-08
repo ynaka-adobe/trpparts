@@ -37,6 +37,26 @@ export default function transform(hookName, element, payload) {
       aboutRows[0].before(bands);
       bands.append(...aboutRows);
     }
+    // local deals: the retailer part is personalized per visitor on trpparts.com (closest retailer,
+    // map, its deals), so it isn't copied; a generic panel links to the personalized page instead
+    const retailerDetail = element.querySelector('#retailer-detail');
+    if (retailerDetail) {
+      const doc = retailerDetail.ownerDocument;
+      element.querySelector('h2#special-offers')?.closest('.row')?.remove();
+      const intro = doc.createElement('p');
+      intro.textContent = 'Local deals vary by TRP retailer. See the current deals at the TRP retailer closest to you.';
+      const cta = doc.createElement('p');
+      const link = doc.createElement('a');
+      link.href = 'https://www.trpparts.com/local-deals/';
+      link.textContent = 'Find Your Local Deals';
+      cta.append(link);
+      retailerDetail.replaceWith(intro, cta);
+    }
+    // local deals banner: an empty spacer paragraph opens the text column
+    element.querySelectorAll('.hero-banner.large p').forEach((p) => {
+      if (!p.textContent.trim() && !p.querySelector('img, picture, a')) p.remove();
+    });
+
     // warranty footnotes and FAQ answers: links to migrated pages stay site-relative (with the
     // trailing slash their EDS paths use); everything else is linked on trpparts.com
     const MIGRATED = ['/', '/resources/', '/media-center/', '/performance-membership/', '/deals/',
@@ -73,6 +93,7 @@ export default function transform(hookName, element, payload) {
       '.header-content-wrapper a[href^="/"]',
       '#offer-search .local-deals a[href^="/"]',
       '.about-us a[href^="/"]',
+      '.local-deals-cta a[href^="/"]',
     ].join(', ')).forEach((a) => {
       a.setAttribute('href', new URL(a.getAttribute('href'), 'https://www.trpparts.com/').href);
     });

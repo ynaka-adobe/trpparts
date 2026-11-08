@@ -44,9 +44,10 @@
       "/deals/index",
       "/about-us/index",
       "/about-us/warranty/index",
-      "/about-us/faqs/index"
+      "/about-us/faqs/index",
+      "/local-deals/index"
     ],
-    "reuseCount": 8,
-    "lastUsed": "2026-11-08T04:55:00.000Z"
+    "reuseCount": 9,
+    "lastUsed": "2026-11-08T16:15:00.000Z"
   }
 }
