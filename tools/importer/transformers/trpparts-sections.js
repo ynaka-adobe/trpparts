@@ -55,9 +55,10 @@ export default function transform(hookName, element, payload) {
       });
 
       if (marker) {
-        // Place metadata at the end of the section, i.e. just before the next <hr>
-        let end = marker.nextElementSibling;
-        while (end && end.tagName !== 'HR') end = end.nextElementSibling;
+        // Place metadata at the end of the section, i.e. just before the next <hr> in document
+        // order (section elements can sit at different depths, so it needn't be a sibling)
+        const hrs = [...element.querySelectorAll('hr')];
+        const end = hrs[hrs.indexOf(marker) + 1];
         if (end) end.parentNode.insertBefore(meta, end);
         else marker.parentNode.appendChild(meta);
         if (i === 0) marker.remove();

@@ -23,8 +23,11 @@ export default function transform(hookName, element, payload) {
   if (hookName === 'beforeTransform') {
     // media center: the "VIEW ALL" buttons are repeated in a desktop-only row; keep the in-column copies
     removeAll(element, ['.media-center > .row.media-desktop']);
-    // media center: articles, press releases and downloads aren't migrated, so link them on trpparts.com
-    element.querySelectorAll('.media-center a[href^="/"]').forEach((a) => {
+    // performance membership: the divider row is drawn by the "divider" section style
+    removeAll(element, ['.container-fluid:has(> .row.performance-line)', '.row.performance-line']);
+    // pages these link to aren't migrated (media center articles/downloads, membership sign-up
+    // and log-in), so link them on trpparts.com
+    element.querySelectorAll('.media-center a[href^="/"], .hero-banner.large a[href^="/"], .performance-list a[href^="/"]').forEach((a) => {
       a.setAttribute('href', new URL(a.getAttribute('href'), 'https://www.trpparts.com/').href);
     });
 

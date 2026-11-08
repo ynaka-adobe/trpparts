@@ -274,7 +274,8 @@ var CustomImportScript = (() => {
   function transform(hookName, element, payload) {
     if (hookName === "beforeTransform") {
       removeAll(element, [".media-center > .row.media-desktop"]);
-      element.querySelectorAll('.media-center a[href^="/"]').forEach((a) => {
+      removeAll(element, [".container-fluid:has(> .row.performance-line)", ".row.performance-line"]);
+      element.querySelectorAll('.media-center a[href^="/"], .hero-banner.large a[href^="/"], .performance-list a[href^="/"]').forEach((a) => {
         a.setAttribute("href", new URL(a.getAttribute("href"), "https://www.trpparts.com/").href);
       });
       removeAll(element, [
@@ -399,8 +400,8 @@ var CustomImportScript = (() => {
           cells: { style: section.style }
         });
         if (marker) {
-          let end = marker.nextElementSibling;
-          while (end && end.tagName !== "HR") end = end.nextElementSibling;
+          const hrs = [...element.querySelectorAll("hr")];
+          const end = hrs[hrs.indexOf(marker) + 1];
           if (end) end.parentNode.insertBefore(meta, end);
           else marker.parentNode.appendChild(meta);
           if (i === 0) marker.remove();

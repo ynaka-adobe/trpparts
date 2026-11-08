@@ -1,0 +1,201 @@
+/* columns-media: image beside text, one band per row
+   (source: /performance-membership/ flexboxgrid rows, col-sm-5|7 and col-sm-4|8
+   with 32px gutters, stacked below 768px) */
+
+/* mobile: cells stack in authored order (the source keeps DOM order below 768px) */
+.columns-media .columns-media-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.columns-media .columns-media-row > div {
+  min-width: 0;
+}
+
+/* image cell: the source wraps the image in a paragraph (16px above and below) */
+.columns-media .columns-media-img-col {
+  padding: 16px 0;
+  text-align: center;
+}
+
+/* text-first: the text sits above the image in every row while stacked
+   (the source DOM is text-first and only reorders from 768px) */
+.columns-media.text-first .columns-media-img-col {
+  order: 1;
+}
+
+.columns-media .columns-media-img-col p {
+  margin: 0;
+}
+
+.columns-media .columns-media-img-col picture {
+  display: block;
+}
+
+/* images show at their natural size, capped by the column */
+.columns-media .columns-media-img-col img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+  vertical-align: bottom;
+}
+
+/* default (photo) rows: the source photo carries margin-top: 1.5em */
+.columns-media:not(.text-first) .columns-media-img-col img {
+  margin-top: 24px;
+}
+
+/* text-first rows with the image after the text: the source image column opens with a <br> */
+.columns-media.text-first .columns-media-img-end > .columns-media-img-col {
+  padding-top: calc(16px + 25.6px);
+}
+
+/* headings (source: H1 Franklin Gothic Book 30/32px, H2 Franklin Gothic URW Condensed Medium 24px) */
+.columns-media .columns-media-text-col h1 {
+  margin: 0.375em 0 0.25em;
+  font-family: var(--heading-font-family);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.375;
+}
+
+.columns-media .columns-media-text-col h2 {
+  margin: 0.83em 0;
+  font-family: var(--condensed-font-family);
+  font-size: var(--heading-font-size-xl);
+  font-weight: var(--condensed-font-weight);
+  line-height: 1.375;
+}
+
+.columns-media .columns-media-text-col p {
+  margin: 16px 0;
+}
+
+/* registered marks sit on the line without opening it up */
+.columns-media .columns-media-text-col sup {
+  line-height: 0;
+}
+
+/* check-mark list (source: .login-details li:before checkmark-blue.png, 20px + 12px gap) */
+.columns-media .columns-media-checklist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.columns-media .columns-media-checklist > li {
+  position: relative;
+  padding: 2.4px 2.4px 2.4px calc(2.4px + 32px);
+}
+
+.columns-media .columns-media-checklist > li::before {
+  content: '';
+  position: absolute;
+  top: calc(2.4px + 4px);
+  left: 2.4px;
+  width: 20px;
+  height: 17px;
+  background-color: var(--brand-blue);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 17'%3E%3Cpath d='M0 9.4c1.4-1.4 2.7-2.1 3.9-2.3 1.1 1.1 2.1 2.5 3 4.1C10.3 6.4 14.5 2.6 20 0c-4.9 4.3-8.8 10-11.7 17H5C3.7 14.2 2 11.6 0 9.4Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.columns-media .columns-media-checklist > li > p {
+  margin: 0;
+}
+
+/* button lines: one inline group, wrapping and centered when stacked (source .performance-list-cta) */
+.columns-media .columns-media-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px 9px;
+  margin: 31px 0 10px;
+}
+
+.columns-media .columns-media-buttons .button-container {
+  display: block;
+  margin: 0;
+}
+
+.columns-media a.button.primary:any-link,
+.columns-media a.button.secondary:any-link {
+  display: inline-block;
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 4px 48px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.columns-media a.button.primary:any-link {
+  min-width: 220px;
+  border-color: var(--link-hover-color);
+  background-color: var(--link-hover-color);
+  color: #fff;
+}
+
+.columns-media a.button.secondary:any-link {
+  border-color: var(--brand-blue);
+  background-color: transparent;
+  color: var(--brand-blue);
+  font-weight: 600;
+}
+
+.columns-media a.button.primary:hover,
+.columns-media a.button.primary:focus {
+  border-color: #821310;
+  background-color: #821310;
+  color: #fff;
+}
+
+.columns-media a.button.secondary:hover,
+.columns-media a.button.secondary:focus {
+  border-color: #821310;
+  background-color: transparent;
+  color: #821310;
+}
+
+/* from 768px: side by side with the source's 32px gutter; image column 5/12 (default)
+   or 4/12 (text-first), text takes the rest; columns align to the top */
+@media (width >= 768px) {
+  .columns-media .columns-media-row {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .columns-media .columns-media-img-col {
+    flex: 0 0 calc((100% + 32px) * 5 / 12 - 32px);
+  }
+
+  .columns-media.text-first .columns-media-img-col {
+    flex-basis: calc((100% + 32px) * 4 / 12 - 32px);
+    order: 0;
+  }
+
+  /* the photo row ends with the photo (the divider rule sits 22px below it) */
+  .columns-media:not(.text-first) .columns-media-img-col {
+    padding-bottom: 0;
+  }
+
+  .columns-media .columns-media-text-col {
+    flex: 1 1 0;
+  }
+
+  .columns-media .columns-media-text-col h1 {
+    font-size: var(--heading-font-size-xxl);
+  }
+
+  .columns-media .columns-media-buttons {
+    justify-content: flex-start;
+    margin-top: 21px;
+  }
+}

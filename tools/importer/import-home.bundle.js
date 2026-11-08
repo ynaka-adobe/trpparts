@@ -166,7 +166,12 @@ var CustomImportScript = (() => {
       const h = searchCol.querySelector("h2");
       if (h) col1.push(heading(document2, h));
       const nearby = searchCol.querySelector("a.find-nearby, #findNearByBttn") || searchCol.querySelector('a[href*="retailers"]');
-      if (nearby) col1.push(linkPara(document2, nearby, "/retailers?findNearBy=findNearBy"));
+      if (nearby) {
+        const p = linkPara(document2, nearby, "/retailers?findNearBy=findNearBy");
+        const link = p.querySelector("a");
+        link.href = new URL(link.getAttribute("href"), "https://www.trpparts.com/").href;
+        col1.push(p);
+      }
     }
     const col2 = [];
     const onlineCol = [...element.querySelectorAll(".row > div")].find((d) => d !== searchCol && !d.classList.contains("retail-form-wrap") && d.querySelector("h2"));
@@ -297,7 +302,63 @@ var CustomImportScript = (() => {
     const m = (el && el.getAttribute("style") || "").match(/url\(\s*(['"]?)([^'")]+)\1\s*\)/i);
     return m ? m[2] : "";
   }
+  function cleanText3(s) {
+    return (s || "").replace(/\s+/g, " ").trim();
+  }
+  function copyInline(document2, source, target) {
+    source.childNodes.forEach((node) => {
+      if (node.nodeType === 3) {
+        target.append(document2.createTextNode(node.textContent.replace(/\s+/g, " ")));
+      } else if (node.nodeType === 1 && /^(SUP|SUB|EM|STRONG|I|B)$/.test(node.tagName)) {
+        const el = document2.createElement(node.tagName.toLowerCase());
+        el.textContent = cleanText3(node.textContent);
+        target.append(el);
+      } else if (node.nodeType === 1) {
+        target.append(document2.createTextNode(cleanText3(node.textContent)));
+      }
+    });
+    const first = target.firstChild;
+    if (first && first.nodeType === 3) first.textContent = first.textContent.replace(/^\s+/, "");
+    const last = target.lastChild;
+    if (last && last.nodeType === 3) last.textContent = last.textContent.replace(/\s+$/, "");
+    return target;
+  }
+  function parseLarge(element, document2) {
+    const imgs = [...element.querySelectorAll("img")];
+    const logo = imgs[0];
+    const textCol = [...element.querySelectorAll('[class*="col-"]')].find((c) => c.querySelector(":scope > p") && !c.querySelector("img"));
+    const scope = textCol || element;
+    const text = [];
+    [...scope.querySelectorAll("p")].forEach((p) => {
+      if (p.querySelector("img")) return;
+      const link = p.querySelector("a[href]");
+      if (link) {
+        const np = document2.createElement("p");
+        const a = document2.createElement("a");
+        a.href = link.getAttribute("href");
+        a.textContent = cleanText3(link.textContent);
+        np.append(a);
+        text.push(np);
+        return;
+      }
+      if (!cleanText3(p.textContent)) return;
+      text.push(copyInline(document2, p, document2.createElement("p")));
+    });
+    const image = [];
+    if (logo && logo.getAttribute("src")) {
+      const img = document2.createElement("img");
+      img.src = absUrl2(logo.getAttribute("src"));
+      img.alt = logo.getAttribute("alt") || "";
+      image.push(img);
+    }
+    const block = WebImporter.Blocks.createBlock(document2, { name: "hero-banner", cells: [[text, image]] });
+    element.replaceWith(block);
+  }
   function parse6(element, { document: document2 }) {
+    if (element.matches && element.matches(".hero-banner.large")) {
+      parseLarge(element, document2);
+      return;
+    }
     const container = element.querySelector(".container-fluid") || element;
     const contentRow = container.querySelector(".row");
     let bgCell = "";
@@ -367,6 +428,11 @@ var CustomImportScript = (() => {
   ];
   function transform(hookName, element, payload) {
     if (hookName === "beforeTransform") {
+      removeAll(element, [".media-center > .row.media-desktop"]);
+      removeAll(element, [".container-fluid:has(> .row.performance-line)", ".row.performance-line"]);
+      element.querySelectorAll('.media-center a[href^="/"], .hero-banner.large a[href^="/"], .performance-list a[href^="/"]').forEach((a) => {
+        a.setAttribute("href", new URL(a.getAttribute("href"), "https://www.trpparts.com/").href);
+      });
       removeAll(element, [
         "#top > header",
         "header",
@@ -391,6 +457,14 @@ var CustomImportScript = (() => {
         "button.slick-prev",
         "button.slick-next",
         ".slick-cloned",
+        // resources page UI the cards-resources block rebuilds (breadcrumb comes from page metadata):
+        // search box beside the H1, Refine-by sidebar, result counts/pagination, loading spinner
+        "nav.breadcrumbs",
+        "#resourcesSearch .resources-ui-wrapper",
+        ".parts-facet-wrapper",
+        "#pagination-header",
+        "#pagination-footer",
+        "img.part-loading-image",
         // non-content embeds
         "script",
         "noscript",
@@ -481,8 +555,8 @@ var CustomImportScript = (() => {
           cells: { style: section.style }
         });
         if (marker) {
-          let end = marker.nextElementSibling;
-          while (end && end.tagName !== "HR") end = end.nextElementSibling;
+          const hrs = [...element.querySelectorAll("hr")];
+          const end = hrs[hrs.indexOf(marker) + 1];
           if (end) end.parentNode.insertBefore(meta, end);
           else marker.parentNode.appendChild(meta);
           if (i === 0) marker.remove();

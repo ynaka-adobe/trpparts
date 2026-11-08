@@ -130,12 +130,16 @@ function decorateSections(main) {
 
 /**
  * Adds a "Home › {breadcrumb title or page title}" breadcrumb at the top of the first section
+ * (the second one when the page opens with a block-only section such as a banner)
  * (pages with metadata breadcrumbs: true).
  * @param {Element} main The container element
  */
 function buildBreadcrumbs(main) {
-  const first = main.querySelector(':scope > div');
+  let first = main.querySelector(':scope > div');
   if (!first) return;
+  // a leading section holding only a block (e.g. a promo banner) keeps the trail below it
+  const blockOnly = [...first.children].every((el) => el.matches('div[class]'));
+  if (blockOnly && first.nextElementSibling) first = first.nextElementSibling;
   // the trail label can differ from the page title (metadata breadcrumb-title, e.g. "Media")
   const title = getMetadata('breadcrumb-title') || getMetadata('og:title')
     || main.querySelector('h1')?.textContent || document.title;

@@ -145,7 +145,7 @@
         "https://www.trpparts.com/media-center/"
       ],
       "representativeUrl": "https://www.trpparts.com/media-center/",
-      "description": "Media Center: H1, recent articles and recent press releases side by side, featured downloads, Where To Buy strip",
+      "description": "To be named in naming step",
       "blocks": [
         {
           "name": "cards-articles",
@@ -166,7 +166,6 @@
           ]
         }
       ],
-      "urlPattern": "/*",
       "sections": [
         {
           "id": "section-1",
@@ -227,6 +226,87 @@
         },
         {
           "id": "section-5",
+          "name": "Where To Buy / Buy Online",
+          "selector": [
+            "section.retailer-search"
+          ],
+          "style": "red",
+          "blocks": [
+            "columns-retailer"
+          ],
+          "defaultContent": []
+        }
+      ],
+      "urlPattern": "/*"
+    },
+    {
+      "name": "performance-membership",
+      "urls": [
+        "https://www.trpparts.com/performance-membership/"
+      ],
+      "representativeUrl": "https://www.trpparts.com/performance-membership/",
+      "description": "Performance Membership: promo banner, Online Rewards Program (image + list + sign-up/log-in buttons), image/text bands, Where To Buy strip",
+      "blocks": [
+        {
+          "name": "hero-banner",
+          "instances": [
+            "div.hero-banner.large"
+          ]
+        },
+        {
+          "name": "columns-media",
+          "instances": [
+            "section.subpage-content .row:has(> .col-sm-5 .performance-list-img)",
+            "section.subpage-content .row:has(> .col-xs-12 > .row > .col-sm-8)"
+          ]
+        },
+        {
+          "name": "columns-retailer",
+          "instances": [
+            "section.retailer-search"
+          ]
+        }
+      ],
+      "urlPattern": "/*",
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Promo banner",
+          "selector": [
+            "div.hero-banner.large"
+          ],
+          "style": "red-gradient",
+          "blocks": [
+            "hero-banner"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-2",
+          "name": "Online Rewards Program",
+          "selector": [
+            "section.subpage-content .row:has(> .col-sm-5 .performance-list-img)"
+          ],
+          "style": "divider",
+          "blocks": [
+            "columns-media"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-3",
+          "name": "Your Ticket to Savings / Easy Management",
+          "selector": [
+            "section.subpage-content .row:has(> .col-xs-12 > .row > .col-sm-8)"
+          ],
+          "style": null,
+          "blocks": [
+            "columns-media"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-4",
           "name": "Where To Buy / Buy Online",
           "selector": [
             "section.retailer-search"

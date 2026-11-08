@@ -1,0 +1,46 @@
+{
+  "variantName": "columns-media",
+  "baseBlock": "columns",
+  "version": "1.0.0",
+  "created": "2026-11-08T00:00:00.000Z",
+  "canonicalModel": "standalone",
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/performance-membership/",
+    "originPage": "TRP Performance Membership",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "section": "Online Rewards Program / Your Ticket to Savings / Easy Management",
+    "colorScheme": "light",
+    "density": "comfortable",
+    "purpose": "image beside text bands, image on either side per row",
+    "description": "Each row is a side-by-side band: a picture-only column sized to its image (~400px max, centered) and a text column taking the rest, vertically centered; stacked in authored order below 768px. Lists in the text get blue check-mark bullets; bold links render as red filled buttons, italic links as blue-outline buttons, inline side by side."
+  },
+  "contentPattern": {
+    "structure": "one row per band, 2 cells; one cell holds only an image, the other the text (heading, paragraphs, optional bulleted list, optional button paragraphs)",
+    "buttonCount": 2,
+    "imageCount": 1,
+    "hasCTA": true,
+    "notes": "The image cell can be first or last in a row. Button links go one per paragraph: **bold link** = primary (red), *italic link* = secondary (blue outline); consecutive button paragraphs are grouped inline."
+  },
+  "options": [],
+  "memberVariantIds": [],
+  "reuseGuidance": {
+    "suitableFor": [
+      "image + text feature bands, alternating sides",
+      "promo/membership intro with check-mark benefits list and sign-up / log-in buttons"
+    ],
+    "notSuitableFor": [
+      "three or more text columns (use columns)",
+      "card grids or lists of items (use a cards variant)",
+      "full-width banners with text over an image (use hero-banner)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/performance-membership/index"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-08T00:00:00.000Z"
+  }
+}

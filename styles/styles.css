@@ -430,3 +430,25 @@ main .section.red h4 {
 main .section.red a:any-link:not(.button) {
   color: #fff;
 }
+
+/* promo band: the source's top-to-bottom red gradient (performance membership banner) */
+main .section.red-gradient {
+  background: linear-gradient(to bottom, var(--promo-gradient-top), var(--brand-red));
+  color: #fff;
+  padding: 16px 0;
+}
+
+main .section.red-gradient a:any-link:not(.button) {
+  color: #fff;
+}
+
+/* thin grey rule under the section, inset to the content width */
+main .section.divider::after {
+  content: '';
+  display: block;
+  box-sizing: border-box;
+  width: calc(100% - 2 * var(--content-inset));
+  max-width: calc(var(--content-max-width) - 2 * var(--content-inset));
+  margin: 22px auto 0;
+  border-bottom: 1px solid var(--rule-color);
+}

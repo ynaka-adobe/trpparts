@@ -1,0 +1,8 @@
+{
+  "status": "failed",
+  "url": "https://www.trpparts.com/performance-membership/",
+  "path": "performance-membership",
+  "timestamp": "2026-11-08T01:20:39.257Z",
+  "error": "BLOCKED_PAGE: CLOUDFLARE — \"attention required! | cloudflare\"",
+  "errorStack": "Error: BLOCKED_PAGE: CLOUDFLARE — \"attention required! | cloudflare\"\n    at processUrl (file:///home/node/.excat-marketplaces/excat-marketplace/excat/skills/excat-content-import/scripts/run-bulk-import.js:625:15)\n    at async main (file:///home/node/.excat-marketplaces/excat-marketplace/excat/skills/excat-content-import/scripts/run-bulk-import.js:1008:33)"
+}

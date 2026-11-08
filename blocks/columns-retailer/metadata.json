@@ -39,9 +39,10 @@
     "pagesUsing": [
       "/index",
       "/resources/index",
-      "/media-center/index"
+      "/media-center/index",
+      "/performance-membership/index"
     ],
-    "reuseCount": 3,
-    "lastUsed": "2026-11-07T19:08:15.248Z"
+    "reuseCount": 4,
+    "lastUsed": "2026-11-08T01:10:00.000Z"
   }
 }

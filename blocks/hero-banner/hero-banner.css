@@ -214,3 +214,164 @@ main .hero-banner.hero-banner-has-media a.button:focus {
     margin-right: 0;
   }
 }
+
+/*
+ * Columns layout (structure C, class set by hero-banner.js): one row with a
+ * text cell and a logo cell on the section's color (e.g. red-gradient promo).
+ * Mobile: stacked and centered. Source sizes step up at 768px and 1025px.
+ */
+.hero-banner.hero-banner-columns {
+  display: block;
+  height: auto;
+  padding: 0;
+  overflow: visible;
+  color: inherit;
+}
+
+.hero-banner.hero-banner-columns::after {
+  content: none;
+}
+
+.hero-banner.hero-banner-columns > .hero-banner-content {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: none;
+}
+
+.hero-banner.hero-banner-columns .hero-banner-text,
+.hero-banner.hero-banner-columns .hero-banner-media {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.hero-banner.hero-banner-columns .hero-banner-text p {
+  max-width: none;
+  margin: 0;
+  color: inherit;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.hero-banner.hero-banner-columns .hero-banner-text > p:first-child {
+  margin: 0.15em 0;
+  font-family: var(--heading-font-family);
+  font-size: 36px;
+  font-weight: var(--display-font-weight);
+}
+
+.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2) {
+  font-family: var(--heading-font-family);
+  font-size: 64px;
+  font-weight: var(--display-font-weight);
+}
+
+.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(n + 3) {
+  margin: 0.5em 0;
+}
+
+.hero-banner.hero-banner-columns .hero-banner-text sup {
+  position: relative;
+  top: -0.25em;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2) sup {
+  top: -0.375em;
+  font-size: 62.5%;
+}
+
+.hero-banner.hero-banner-columns .hero-banner-text .button-container {
+  display: block;
+}
+
+main .hero-banner.hero-banner-columns a.button:any-link {
+  display: inline-block;
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 0.65em 0 0;
+  padding: 12px 36px;
+  border: 1px solid var(--brand-blue);
+  border-radius: 5px;
+  background-color: var(--brand-blue);
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  vertical-align: middle;
+  transition: color 0.3s, background-color 0.3s, border 0.3s;
+}
+
+main .hero-banner.hero-banner-columns a.button:hover,
+main .hero-banner.hero-banner-columns a.button:focus {
+  background-color: var(--button-hover-background);
+  color: var(--brand-blue);
+}
+
+.hero-banner.hero-banner-columns .hero-banner-media picture {
+  display: block;
+  max-width: none;
+  margin: 12px 0;
+}
+
+.hero-banner.hero-banner-columns .hero-banner-media img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: bottom;
+}
+
+/* breakpoint-exception: source switches to two equal columns at 48em (768px) */
+@media (width >= 768px) {
+  .hero-banner.hero-banner-columns .hero-banner-text,
+  .hero-banner.hero-banner-columns .hero-banner-media {
+    flex: 0 0 50%;
+    max-width: 50%;
+    text-align: left;
+  }
+
+  .hero-banner.hero-banner-columns .hero-banner-text > p,
+  .hero-banner.hero-banner-columns .hero-banner-text > p:first-child,
+  .hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(n + 3),
+  .hero-banner.hero-banner-columns .hero-banner-media picture {
+    margin-left: 25px;
+  }
+
+  .hero-banner.hero-banner-columns .hero-banner-text > p:first-child {
+    font-size: 34px;
+  }
+}
+
+/* breakpoint-exception: source enlarges the promo text above 1024px */
+@media (width >= 1025px) {
+  .hero-banner.hero-banner-columns .hero-banner-text p {
+    font-size: 28px;
+  }
+
+  .hero-banner.hero-banner-columns .hero-banner-text > p:first-child {
+    font-size: 46px;
+  }
+
+  .hero-banner.hero-banner-columns .hero-banner-text > p:nth-child(2) {
+    font-size: 112px;
+  }
+
+  .hero-banner.hero-banner-columns .hero-banner-text > p.button-container {
+    font-size: 20px;
+  }
+
+  main .hero-banner.hero-banner-columns a.button:any-link {
+    padding: 10px 30px;
+    font-size: 20px;
+  }
+
+  .hero-banner.hero-banner-columns .hero-banner-media picture {
+    margin: 14px 0 14px 25px;
+  }
+}
