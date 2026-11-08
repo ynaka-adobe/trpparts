@@ -151,6 +151,17 @@ footer .footer-legal a:focus-visible {
 }
 
 /* floating back-to-top: fades in after about one viewport of scrolling */
+
+/* back-to-top shows once this marker, one viewport down the page, has scrolled out of view */
+.footer-backtotop-marker {
+  position: absolute;
+  top: 100vh;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
 footer .footer-backtotop {
   color: #333;
   font: 16px / 1.6 Arial, Helvetica, sans-serif;

@@ -37,6 +37,33 @@ export default function transform(hookName, element, payload) {
       aboutRows[0].before(bands);
       bands.append(...aboutRows);
     }
+    // warranty footnotes and FAQ answers: links to migrated pages stay site-relative (with the
+    // trailing slash their EDS paths use); everything else is linked on trpparts.com
+    const MIGRATED = ['/', '/resources/', '/media-center/', '/performance-membership/', '/deals/',
+      '/about-us/', '/about-us/warranty/', '/about-us/faqs/'];
+    element.querySelectorAll('.footnotes a[href^="/"], dl.faqs-content a[href^="/"]').forEach((a) => {
+      const url = new URL(a.getAttribute('href'), 'https://www.trpparts.com/');
+      const path = url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`;
+      a.setAttribute('href', MIGRATED.includes(path) ? `${path}${url.search}${url.hash}` : url.href);
+      a.removeAttribute('title');
+      a.removeAttribute('data-id');
+    });
+    // FAQs: the questions are a definition list; author them as H2 headings with their answers
+    element.querySelectorAll('dl.faqs-content').forEach((dl) => {
+      const doc = dl.ownerDocument;
+      const out = doc.createElement('div');
+      [...dl.children].forEach((item) => {
+        if (item.tagName === 'DT') {
+          const h2 = doc.createElement('h2');
+          h2.innerHTML = item.innerHTML.trim();
+          out.append(h2);
+        } else if (item.tagName === 'DD') {
+          out.append(...item.childNodes);
+        }
+      });
+      dl.replaceWith(...out.childNodes);
+    });
+
     // pages these link to aren't migrated (media center articles/downloads, membership sign-up
     // and log-in, deals sign-up and local offers, about-us parts), so link them on trpparts.com
     element.querySelectorAll([

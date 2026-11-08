@@ -1,0 +1,48 @@
+{
+  "variantName": "table-ruled",
+  "baseBlock": "table",
+  "version": "1.0.0",
+  "created": "2026-11-08T00:00:00.000Z",
+  "canonicalModel": "standalone",
+  "options": [],
+  "memberVariantIds": [],
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/about-us/warranty/",
+    "originPage": "TRP Warranty",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "sections": [
+      "Warranty intro, extended warranty table, footnotes"
+    ],
+    "colorScheme": "light",
+    "density": "medium",
+    "purpose": "genuine tabular data compared row by row (product x coverage x labor)",
+    "imagePattern": "none",
+    "description": "Table with no outer borders and no striping, a 1px rgba(0,0,0,.2) rule under every row. Header first cell 1.25em bold, other header cells 0.9em bold (~14% wide). Body cells padded 1rem 0, top-aligned; a cell may contain a line break. At 480px and below each row stacks: the first cell on its own line (weight 600), then the other two side by side at 75% / 25%."
+  },
+  "contentPattern": {
+    "structure": "one row per table row; cells = columns; the first row is the header (rendered as th) unless the no-header option is set",
+    "buttonCount": 0,
+    "imageCount": 0,
+    "hasDescription": false,
+    "notes": "Same authoring as the boilerplate Table block (its decorate is reused). Header cells are plain text, not headings. A line break inside a cell is kept. The mobile stacked layout assumes three columns (label, then two values)."
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "warranty / coverage tables",
+      "spec or comparison tables with a label column and short value columns"
+    ],
+    "notSuitableFor": [
+      "layout grids (use columns)",
+      "tables needing borders or striping (use table with bordered / striped)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/about-us/warranty"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-08T00:00:00.000Z"
+  }
+}

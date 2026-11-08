@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.trpparts.com/about-us/warranty/",
+  "path": "about-us/warranty/index",
+  "timestamp": "2026-11-08T05:01:56.753Z",
+  "title": "Warranty",
+  "template": "warranty",
+  "blocks": [
+    "table-ruled",
+    "columns-retailer"
+  ]
+}

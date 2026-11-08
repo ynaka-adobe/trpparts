@@ -499,6 +499,112 @@
           "defaultContent": []
         }
       ]
+    },
+    {
+      "name": "warranty",
+      "urls": [
+        "https://www.trpparts.com/about-us/warranty/"
+      ],
+      "representativeUrl": "https://www.trpparts.com/about-us/warranty/",
+      "description": "Warranty: H1, intro text, extended warranty table, footnotes, Where To Buy strip",
+      "blocks": [
+        {
+          "name": "table-ruled",
+          "instances": [
+            "#warranty-coverage .warranty-table",
+            ".warranty-table"
+          ]
+        },
+        {
+          "name": "columns-retailer",
+          "instances": [
+            "section.retailer-search"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Warranty",
+          "selector": [
+            "section.subpage-content"
+          ],
+          "style": "condensed-headings, footnotes",
+          "blocks": [
+            "table-ruled"
+          ],
+          "defaultContent": [
+            "section.subpage-content h1",
+            "section.subpage-content h1 ~ p",
+            "section.subpage-content h2",
+            ".footnotes p"
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Where To Buy / Buy Online",
+          "selector": [
+            "section.retailer-search"
+          ],
+          "style": "red",
+          "blocks": [
+            "columns-retailer"
+          ],
+          "defaultContent": []
+        }
+      ]
+    },
+    {
+      "name": "faqs",
+      "urls": [
+        "https://www.trpparts.com/about-us/faqs/"
+      ],
+      "representativeUrl": "https://www.trpparts.com/about-us/faqs/",
+      "description": "FAQs: H1, list of question jump links, questions and answers, Where To Buy strip",
+      "blocks": [
+        {
+          "name": "faq-index",
+          "instances": [
+            "ul.faqs-links"
+          ]
+        },
+        {
+          "name": "columns-retailer",
+          "instances": [
+            "section.retailer-search"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "FAQs",
+          "selector": [
+            "section.subpage-content"
+          ],
+          "style": "bold-headings",
+          "blocks": [
+            "faq-index"
+          ],
+          "defaultContent": [
+            "section.subpage-content h1",
+            "dl.faqs-content dt",
+            "dl.faqs-content dd"
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Where To Buy / Buy Online",
+          "selector": [
+            "section.retailer-search"
+          ],
+          "style": "red",
+          "blocks": [
+            "columns-retailer"
+          ],
+          "defaultContent": []
+        }
+      ]
     }
   ]
 }

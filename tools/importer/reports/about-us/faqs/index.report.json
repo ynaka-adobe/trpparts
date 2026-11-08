@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.trpparts.com/about-us/faqs/",
+  "path": "about-us/faqs/index",
+  "timestamp": "2026-11-08T05:02:04.061Z",
+  "title": "FAQs",
+  "template": "faqs",
+  "blocks": [
+    "faq-index",
+    "columns-retailer"
+  ]
+}

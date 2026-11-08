@@ -155,10 +155,25 @@ function buildBreadcrumbs(main) {
   homeLink.href = '/';
   homeLink.textContent = 'Home';
   home.append(homeLink);
+  list.append(home);
+  // parent folders become middle crumbs (/about-us/warranty/ -> "About Us"); the local preview
+  // serves pages under /content, which is not part of the trail
+  const folders = window.location.pathname.replace(/^\/content(?=\/)/, '')
+    .split('/').filter(Boolean).slice(0, -1);
+  const parentLabel = getMetadata('breadcrumb-parent');
+  folders.forEach((folder, i) => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = `/${folders.slice(0, i + 1).join('/')}/`;
+    a.textContent = (i === folders.length - 1 && parentLabel)
+      || folder.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    li.append(a);
+    list.append(li);
+  });
   const current = document.createElement('li');
   current.setAttribute('aria-current', 'page');
   current.textContent = title.trim();
-  list.append(home, current);
+  list.append(current);
   nav.append(list);
   first.prepend(nav);
 }

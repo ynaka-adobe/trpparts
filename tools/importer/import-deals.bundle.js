@@ -177,6 +177,37 @@ var CustomImportScript = (() => {
         aboutRows[0].before(bands);
         bands.append(...aboutRows);
       }
+      const MIGRATED = [
+        "/",
+        "/resources/",
+        "/media-center/",
+        "/performance-membership/",
+        "/deals/",
+        "/about-us/",
+        "/about-us/warranty/",
+        "/about-us/faqs/"
+      ];
+      element.querySelectorAll('.footnotes a[href^="/"], dl.faqs-content a[href^="/"]').forEach((a) => {
+        const url = new URL(a.getAttribute("href"), "https://www.trpparts.com/");
+        const path = url.pathname.endsWith("/") ? url.pathname : `${url.pathname}/`;
+        a.setAttribute("href", MIGRATED.includes(path) ? `${path}${url.search}${url.hash}` : url.href);
+        a.removeAttribute("title");
+        a.removeAttribute("data-id");
+      });
+      element.querySelectorAll("dl.faqs-content").forEach((dl) => {
+        const doc = dl.ownerDocument;
+        const out = doc.createElement("div");
+        [...dl.children].forEach((item) => {
+          if (item.tagName === "DT") {
+            const h2 = doc.createElement("h2");
+            h2.innerHTML = item.innerHTML.trim();
+            out.append(h2);
+          } else if (item.tagName === "DD") {
+            out.append(...item.childNodes);
+          }
+        });
+        dl.replaceWith(...out.childNodes);
+      });
       element.querySelectorAll([
         '.media-center a[href^="/"]',
         '.hero-banner.large a[href^="/"]',

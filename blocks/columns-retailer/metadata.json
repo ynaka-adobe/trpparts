@@ -42,9 +42,11 @@
       "/media-center/index",
       "/performance-membership/index",
       "/deals/index",
-      "/about-us/index"
+      "/about-us/index",
+      "/about-us/warranty/index",
+      "/about-us/faqs/index"
     ],
-    "reuseCount": 6,
-    "lastUsed": "2026-11-08T04:05:00.000Z"
+    "reuseCount": 8,
+    "lastUsed": "2026-11-08T04:55:00.000Z"
   }
 }

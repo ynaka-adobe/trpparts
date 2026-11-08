@@ -1,0 +1,115 @@
+/* table-ruled: data table with a 1px rule under every row, no outer borders, no striping
+   (source: /about-us/warranty/ .warranty-table, rows of div.cell) */
+
+/* the source table sits 16px inside the content column, padded 1em top / 3em bottom */
+.table-ruled {
+  padding: 1em 16px 3em;
+}
+
+.table-ruled table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* mobile (480px and below, the source's breakpoint): each row stacks, the first cell on its
+   own line, the other two side by side (75% / 25%); the rule sits above each body row */
+.table-ruled thead,
+.table-ruled tbody {
+  display: block;
+}
+
+.table-ruled tr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  column-gap: 4px;
+}
+
+.table-ruled thead tr {
+  align-items: center;
+}
+
+.table-ruled th,
+.table-ruled td {
+  display: block;
+  width: calc(75% - 3px);
+  text-align: left;
+}
+
+.table-ruled tr > :first-child {
+  width: 100%;
+}
+
+.table-ruled tr > :last-child {
+  width: calc(25% - 3px);
+}
+
+/* header: plain bold text, the first cell larger; its paragraphs keep their 1em margins */
+.table-ruled th {
+  padding: 0;
+  font-size: 0.9em;
+  font-weight: 700;
+  line-height: 1.25em;
+  vertical-align: middle;
+}
+
+.table-ruled th:first-child {
+  font-size: 1.25em;
+}
+
+.table-ruled th p {
+  margin: 1em 0;
+}
+
+.table-ruled td {
+  padding: 1rem 0;
+  vertical-align: top;
+}
+
+.table-ruled td:first-child {
+  border-top: 1px solid rgb(0 0 0 / 20%);
+  font-weight: 600;
+}
+
+.table-ruled td p {
+  margin: 0.125em 0 0.25em;
+}
+
+/* breakpoint-exception: the source switches its warranty rows to a single line above 480px */
+@media (width >= 481px) {
+  .table-ruled thead {
+    display: table-header-group;
+  }
+
+  .table-ruled tbody {
+    display: table-row-group;
+  }
+
+  .table-ruled tr {
+    display: table-row;
+  }
+
+  .table-ruled tr > * {
+    display: table-cell;
+    border-bottom: 1px solid rgb(0 0 0 / 20%);
+  }
+
+  /* the value columns are 14% wide; the label column takes the rest */
+  .table-ruled tr > :first-child,
+  .table-ruled tr > :last-child,
+  .table-ruled tbody tr > * {
+    width: auto;
+  }
+
+  .table-ruled thead tr > :not(:first-child) {
+    width: 14%;
+  }
+
+  .table-ruled tbody tr > :first-child {
+    border-top: 0;
+    font-weight: inherit;
+  }
+}

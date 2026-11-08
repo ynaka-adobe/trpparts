@@ -109,9 +109,15 @@ function buildBackToTop(section) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   wrapper.append(link);
-  const update = () => wrapper.classList.toggle('is-visible', window.scrollY >= window.innerHeight);
-  window.addEventListener('scroll', update, { passive: true });
-  update();
+  // visible once the page has scrolled a full viewport: an observer watches a marker one viewport
+  // down, so nothing reads scroll position or layout while the page is being built (no reflow)
+  const marker = document.createElement('div');
+  marker.className = 'footer-backtotop-marker';
+  marker.setAttribute('aria-hidden', 'true');
+  document.body.prepend(marker);
+  new IntersectionObserver(([entry]) => {
+    wrapper.classList.toggle('is-visible', entry.boundingClientRect.top < 0);
+  }).observe(marker);
   return wrapper;
 }
 

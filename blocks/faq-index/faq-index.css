@@ -1,0 +1,14 @@
+/* faq-index: jump list of the page's questions (source: /about-us/faqs/ ul.faqs-links) */
+
+/* links use the global a:any-link / a:hover rules (#06539c underlined, #b51c16 on hover/focus);
+   no block link rule, so the hover state is not overridden */
+.faq-index ul {
+  margin: 0 0 32px;
+  padding: 0 0 0 16px;
+  list-style: disc;
+}
+
+.faq-index li {
+  margin: 0;
+  padding-left: 8px;
+}

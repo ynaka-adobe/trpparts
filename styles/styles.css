@@ -475,9 +475,43 @@ main .section.blue-headings .default-content-wrapper > h2 {
   text-transform: uppercase;
 }
 
+/* condensed section headings (warranty: "Extended Warranty Coverage") */
+/* stylelint-disable-next-line no-descending-specificity -- different elements from the earlier rules */
+main .section.condensed-headings .default-content-wrapper > h2 {
+  margin: 20px 0;
+  font-family: var(--condensed-font-family);
+  font-size: var(--heading-font-size-xl);
+  font-weight: var(--condensed-font-weight);
+  line-height: 1.375;
+}
+
+/* FAQ questions: bold body-font headings with room between the answers */
+/* stylelint-disable-next-line no-descending-specificity -- different elements from the earlier rules */
+main .section.bold-headings .default-content-wrapper > h2 {
+  margin: 48px 0 18px;
+  padding: 9px 0;
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+main .section.bold-headings .default-content-wrapper > h2:first-child {
+  margin-top: 0;
+}
+
 /* the heading's own margin is the gap under the previous section (no extra section padding) */
-main > .section.blue-headings > .default-content-wrapper:has(> h2:first-child) {
+main > .section.blue-headings > .default-content-wrapper:has(> h2:first-child),
+main > .section.bold-headings > .default-content-wrapper:has(> h2:first-child) {
   padding-top: 0;
+}
+
+/* smaller notes after a block (warranty: the footnotes under the table) */
+/* stylelint-disable-next-line no-descending-specificity -- different elements from the earlier rules */
+main .section.footnotes > div:not(.default-content-wrapper) ~ .default-content-wrapper p {
+  margin: 14.4px 0;
+  font-size: 14.4px;
+  line-height: 1.6;
 }
 
 /* a plain list flowed into columns (about us: the makes TRP covers) */
@@ -563,6 +597,7 @@ main > .section.cards-deals-container > .default-content-wrapper:last-child {
   text-align: center;
 }
 
+/* stylelint-disable-next-line no-descending-specificity -- different elements from the earlier rules */
 main > .section.cards-deals-container > .default-content-wrapper:last-child p {
   margin: 0;
 }
