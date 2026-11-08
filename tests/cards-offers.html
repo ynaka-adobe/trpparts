@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Cards offers runtime checks</title>
+    <style>
+      #examples { display: flex; flex-direction: column; gap: 16px; }
+      #examples img { width: 500px; height: 667px; }
+      #examples ul { list-style: none; padding: 0; margin: 0; }
+    </style>
+  </head>
+  <body>
+    <pre id="results">Running...</pre>
+    <div id="examples"></div>
+    <script type="module">
+      import decorate from '../blocks/cards-offers/cards-offers.js';
+
+      const results = document.querySelector('#results');
+      let checks = 0;
+      function assert(condition, message) {
+        if (!condition) throw new Error(message);
+        checks += 1;
+      }
+      function block(rows) {
+        const element = document.createElement('div');
+        rows.forEach((values) => {
+          const row = document.createElement('div');
+          values.forEach((value) => {
+            const cell = document.createElement('div');
+            if (typeof value === 'string') cell.textContent = value;
+            else cell.append(value);
+            row.append(cell);
+          });
+          element.append(row);
+        });
+        return element;
+      }
+      const examples = [
+        ['CEM/trp-brake-product', 'TRP Brake Chambers | Installation of TRP Brake Chambers | 6 | 25 | 10.31.2026'],
+        ['CEM/0-trp-brake-shoe-kit-transparent', 'TRP Brake Shoe | TRP Brake Shoe Kits | 8 | 20 | 10.31.2026'],
+        ['CEM/0-trp-air-spring-truck-transparent', 'TRP Air Spring | TRP Air Spring | 10 | 15 | 10.31.2026'],
+      ];
+      try {
+        const rendered = examples.map((row) => {
+          const element = block([row]);
+          document.querySelector('#examples').append(element);
+          decorate(element);
+          const img = element.querySelector('img');
+          img.loading = 'eager';
+          assert(img.alt === row[1].split('|')[0].trim(), 'Alt uses trimmed line1');
+          assert(!element.querySelector('picture'), 'Composite bypasses EDS media pipeline');
+          assert(element.querySelectorAll('li').length === 1, 'One card per authored row');
+          const url = img.getAttribute('src');
+          assert((url.match(/&src=is\(CEM\/\?/g) || []).length === 7, 'Seven literal nested sources');
+          assert((url.match(/&fit=stretch%2C1\)/g) || []).length === 7, 'Seven nested source endings');
+          assert(url.includes('&textPs=') && url.includes('%5Cexpnd2'), 'Titles use textPs and expnd2');
+          assert(url.includes('&layer=10&src=' + encodeURIComponent(row[0])
+            + '&anchor=0,0&size=500,230&pos=50,350'), 'Requested product layout');
+          const outerLayers = url.replace(/is\(CEM\/\?.*?&fit=stretch%2C1\)/g, 'nested')
+            .match(/(?:\?|&)layer=(\d+|comp)/g);
+          assert(outerLayers.map((value) => value.split('=')[1]).join(',')
+            === '0,1,2,3,4,5,6,7,8,9,10,11,comp', 'Ordered repeated outer layers');
+          assert(url.endsWith('&layer=comp&wid=500&hei=667&fmt=png&qlt=95'), 'Final composite settings');
+          const twoDigits = row[1].split('|')[2].trim().length > 1;
+          assert(url.includes(twoDigits ? '&size=125,150&pos=78,184' : '&size=64,150&pos=78,184'),
+            'Small discount uses appropriate canvas width');
+          assert(url.includes(twoDigits ? '&size=50,48&pos=193,194' : '&size=50,48&pos=132,194'),
+            'Small OFF label clears discount digits');
+          return img;
+        });
+        const special = block([[' CEM/a&(b)\\c ', ' A & (B) {C}\\D\nÉ😀 | Installation | 10 | 25 | date ']]);
+        decorate(special);
+        const specialURL = special.querySelector('img').getAttribute('src');
+        assert(specialURL.includes('src=CEM%2Fa%26%28b%29%5Cc'), 'Asset cannot inject delimiters');
+        const title = decodeURIComponent(specialURL.match(/&textPs=([^&]+)/)[1]);
+        assert(title.includes('A & (B) \\{C\\}\\\\D\\line \\u201?\\u-10179?\\u-8704?'),
+          'RTF escapes braces, backslashes, newlines and Unicode');
+        assert(!specialURL.includes('%255C'), 'RTF is not double encoded');
+        const errors = [];
+        const originalError = console.error;
+        console.error = (...args) => errors.push(args);
+        try {
+          const invalidRows = [
+            ['CEM/asset', 'one | two | 3 | 4'],
+            ['CEM/asset', 'one | two | 3 | 4 | date | extra'],
+            ['CEM/asset', 'one | two | | 4 | date'],
+            ['CEM/asset'],
+          ];
+          const invalid = block(invalidRows);
+          const authored = invalid.textContent;
+          decorate(invalid);
+          assert(invalid.textContent === authored, 'Malformed author content preserved');
+          assert(invalid.querySelectorAll('li').length === 4, 'Malformed rows are not discarded');
+          assert(errors.length === 4, 'Each malformed row reports an error');
+          const failed = block([examples[0]]);
+          decorate(failed);
+          failed.querySelector('img').dispatchEvent(new Event('error'));
+          assert(failed.textContent === examples[0].join(''), 'Failed image restores authored content');
+          assert(!failed.querySelector('[hidden]'), 'Restored content is visible');
+        } finally {
+          console.error = originalError;
+        }
+        const picture = document.createElement('picture');
+        const legacyImage = document.createElement('img');
+        legacyImage.src = 'https://example.com/legacy.png';
+        legacyImage.alt = 'Legacy offer';
+        picture.append(legacyImage);
+        const link = document.createElement('a');
+        link.href = 'https://example.com/deal';
+        link.textContent = 'Deal';
+        const legacy = block([[picture, link]]);
+        decorate(legacy);
+        assert(legacy.querySelector('.cards-offers-link img') === legacyImage, 'Legacy image remains clickable');
+        assert(!legacy.querySelector('.cards-offers-card-body'), 'Legacy bare-link body removed');
+        await Promise.all(rendered.map((img) => img.decode()));
+        assert(rendered.every((img) => img.naturalWidth === 500 && img.naturalHeight === 667),
+          'All required Scene7 examples render at 500 x 667');
+        results.textContent = `PASS: ${checks} runtime checks. Inspect all three images for wrapping and clipping.`;
+        window.cardsOffersTestResult = { passed: true, checks };
+      } catch (error) {
+        results.textContent = `FAIL: ${error.message}`;
+        window.cardsOffersTestResult = { passed: false, checks, error: error.message };
+        console.error(error);
+      }
+    </script>
+  </body>
+</html>
