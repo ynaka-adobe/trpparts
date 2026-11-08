@@ -1,0 +1,46 @@
+{
+  "variantName": "cards-deals",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-11-08T00:00:00.000Z",
+  "canonicalModel": "standalone",
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/deals/",
+    "originPage": "TRP Parts Deals",
+    "blockPosition": "main"
+  },
+  "visualCharacteristics": {
+    "section": "Deals finder",
+    "colorScheme": "light",
+    "density": "medium",
+    "purpose": "dated, expiring deal list with search, Category/Brand facets and sorting",
+    "imagePattern": "none",
+    "description": "Left sidebar (~1/4): 'N Specials' heading, Search input with icon button, collapsible Category and Brand checkbox groups (no counts), red Clear Filters button. Right: 'Sort By:' select above a vertical list of deal cards; each card has the uppercase title, '<N> Redemption Limit' and 'Valid through MM/DD/YYYY' at the left and a large '$<amount> OFF' at the right ('$' superscripted, 'OFF' smaller). Cards alternate white with a 1px #333 border and dark grey #58595b with white text. Mobile: count, then a Filter toggle revealing search/facets/Clear Filters, then Sort By and the list."
+  },
+  "contentPattern": {
+    "structure": "one row per deal, 1 cell: H3 title; '<N> Redemption Limit'; 'Valid through MM/DD/YYYY'; '$<amount> OFF'; last line 'Category: <names, comma separated> | Brand: <brand> | Starts: MM/DD/YYYY' (Brand and Starts optional)",
+    "buttonCount": 0,
+    "imageCount": 0,
+    "hasDescription": false,
+    "notes": "Lines are recognized by pattern, not position; unknown extra paragraphs render under the title. The tag line is not rendered; category names that contain commas ('Body, Cab, & Chassis', 'Fluids, Lubricants, & Chemicals') are recognized as known names before splitting on commas. The block builds the count, search (title and category names), facets (OR within a group, AND between groups; Category in the source facet order, unknown names appended alphabetically; only values used by a current deal), Clear Filters, Sort By (Default, Discount high/low, A-Z, Z-A, Expiring Soon) and the mobile Filter toggle. A deal is hidden after the end of its valid-through day and before its Starts day (local time); with no current deals the block shows 'No current deals.'. No pagination."
+  },
+  "options": [],
+  "memberVariantIds": [],
+  "reuseGuidance": {
+    "suitableFor": [
+      "lists of dated, expiring offers or coupons with an amount off",
+      "long lists that need keyword search, category/brand filters and sorting"
+    ],
+    "notSuitableFor": [
+      "short promotional card grids (use cards or cards-offers)",
+      "lists without 'Category: ...' tag lines (facets would be empty)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/deals/index"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-11-08T00:00:00.000Z"
+  }
+}

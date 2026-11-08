@@ -164,7 +164,14 @@ var CustomImportScript = (() => {
     if (hookName === "beforeTransform") {
       removeAll(element, [".media-center > .row.media-desktop"]);
       removeAll(element, [".container-fluid:has(> .row.performance-line)", ".row.performance-line"]);
-      element.querySelectorAll('.media-center a[href^="/"], .hero-banner.large a[href^="/"], .performance-list a[href^="/"]').forEach((a) => {
+      removeAll(element, ["#offer-search .pagination-header", "#offer-search .show-offers-btn"]);
+      element.querySelectorAll([
+        '.media-center a[href^="/"]',
+        '.hero-banner.large a[href^="/"]',
+        '.performance-list a[href^="/"]',
+        '.header-content-wrapper a[href^="/"]',
+        '#offer-search .local-deals a[href^="/"]'
+      ].join(", ")).forEach((a) => {
         a.setAttribute("href", new URL(a.getAttribute("href"), "https://www.trpparts.com/").href);
       });
       removeAll(element, [

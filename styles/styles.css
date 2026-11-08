@@ -452,3 +452,87 @@ main .section.divider::after {
   margin: 22px auto 0;
   border-bottom: 1px solid var(--rule-color);
 }
+
+main .section.centered {
+  text-align: center;
+}
+
+/* page header band (deals): left-to-right red gradient, title and intro in a 650px column */
+main .section.red-dark-gradient {
+  margin-bottom: 16px;
+  background: linear-gradient(to right, var(--header-band-start), var(--header-band-end));
+  color: #fff;
+}
+
+/* stylelint-disable-next-line no-descending-specificity -- different elements from the earlier rules */
+main .section.red-dark-gradient > .default-content-wrapper {
+  max-width: 650px;
+  padding: 0;
+}
+
+main .section.red-dark-gradient h1 {
+  margin: 0;
+  padding-top: 40px;
+  color: #fff;
+  font-family: var(--condensed-font-family);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.375;
+  text-transform: uppercase;
+}
+
+/* stylelint-disable-next-line no-descending-specificity -- different elements from the earlier rules */
+main .section.red-dark-gradient p {
+  margin: 0;
+  padding-bottom: 40px;
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+}
+
+/* stylelint-disable-next-line no-descending-specificity -- different elements from the earlier rules */
+main .section.red-dark-gradient a:any-link {
+  color: #fff;
+}
+
+/* breakpoint-exception: the source sets the band title at 40px from its 48em (768px) grid */
+@media (width >= 768px) {
+  main .section.red-dark-gradient {
+    margin-bottom: 0;
+  }
+
+  main .section.red-dark-gradient h1 {
+    font-size: 40px;
+  }
+}
+
+/* deals: "SEE YOUR LOCAL OFFERS" is a red button centered under the deals list */
+/* stylelint-disable-next-line no-descending-specificity -- different elements from the earlier rules */
+main > .section.cards-deals-container > .default-content-wrapper:last-child {
+  margin: 20px auto;
+  text-align: center;
+}
+
+main > .section.cards-deals-container > .default-content-wrapper:last-child p {
+  margin: 0;
+}
+
+main > .section.cards-deals-container > .default-content-wrapper:last-child a.button:any-link {
+  border-color: var(--link-hover-color);
+  border-radius: 5px;
+  background-color: var(--link-hover-color);
+  color: #fff;
+}
+
+main > .section.cards-deals-container > .default-content-wrapper:last-child a.button:hover,
+main > .section.cards-deals-container > .default-content-wrapper:last-child a.button:focus-visible {
+  border-color: var(--button-red-hover);
+  background-color: var(--button-red-hover);
+  color: #fff;
+}
+
+/* breakpoint-exception: the list sits in the source's 9/12 results column from 768px */
+@media (width >= 768px) {
+  main > .section.cards-deals-container > .default-content-wrapper:last-child {
+    padding-left: calc(25% + 16px);
+  }
+}

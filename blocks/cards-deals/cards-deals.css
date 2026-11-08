@@ -1,0 +1,448 @@
+/* cards-deals: dated deal list with search, facets and sorting (source: /deals/ section.parts-list-content) */
+
+.cards-deals {
+  --cards-deals-dark: #58595b;
+  --cards-deals-panel: #eee;
+  --cards-deals-muted: #707070;
+  --cards-deals-caret: #444141;
+
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+}
+
+.cards-deals [hidden] {
+  display: none !important;
+}
+
+.cards-deals .cards-deals-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* layout: sidebar above the results on mobile, 1/4 + 3/4 from 768px */
+.cards-deals .cards-deals-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* sidebar (source: .parts-facet-wrapper); on mobile only the Filter toggle shows until opened.
+   The count heading is hidden visually there, not removed: it keeps the heading outline
+   (h1 > h2 > deal h3s) and the result count for assistive tech */
+.cards-deals .cards-deals-count {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  margin: 0 0 16.5px;
+  color: var(--text-color);
+  font-family: var(--condensed-font-family);
+  font-size: 22px;
+  font-weight: var(--condensed-font-weight);
+  line-height: 1.375;
+}
+
+/* source: a.show-offers-btn, centered in a p with 16px margins */
+.cards-deals .cards-deals-filter-toggle {
+  display: block;
+  margin: 16px auto;
+}
+
+/* source: Clear Filters sits in a p with 16px margins */
+.cards-deals .cards-deals-clear {
+  display: inline-block;
+  margin: 16px 0;
+  text-align: start;
+}
+
+.cards-deals .cards-deals-filter-toggle,
+.cards-deals .cards-deals-clear {
+  padding: 4px 24px;
+  border: 1px solid var(--link-hover-color);
+  border-radius: 5px;
+  background-color: var(--link-hover-color);
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: 700;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+.cards-deals .cards-deals-clear:hover,
+.cards-deals .cards-deals-clear:focus-visible,
+.cards-deals .cards-deals-filter-toggle:hover,
+.cards-deals .cards-deals-filter-toggle:focus-visible {
+  border-color: var(--button-red-hover);
+  background-color: var(--button-red-hover);
+}
+
+.cards-deals .cards-deals-panel {
+  margin: 0 0 16px;
+  padding: 16px 16px 0;
+  border-right: 1px solid var(--light-color);
+  background-color: var(--cards-deals-panel);
+}
+
+.cards-deals .cards-deals-sidebar:not(.is-open) .cards-deals-panel {
+  display: none;
+}
+
+/* search (source: .offer-search-wrapper) */
+.cards-deals .cards-deals-search {
+  display: flex;
+  margin: 0;
+  border: 1px solid var(--dark-color);
+  border-radius: 5px;
+  background-color: var(--background-color);
+}
+
+.cards-deals .cards-deals-search input[type='search'] {
+  flex: 1 1 0%;
+  min-width: 0;
+  box-sizing: border-box;
+  height: 36px;
+  margin: 0;
+  padding: 6.4px 8px;
+  border: 0;
+  border-radius: 5px 0 0 5px;
+  background-color: var(--background-color);
+  color: #000;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  line-height: normal;
+  appearance: none;
+}
+
+.cards-deals .cards-deals-search input[type='search']::placeholder {
+  color: #858585;
+}
+
+.cards-deals .cards-deals-search-submit {
+  position: relative;
+  flex: 0 0 32px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0 5px 5px 0;
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  cursor: pointer;
+}
+
+.cards-deals .cards-deals-search-submit::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  background-color: currentcolor;
+  mask: url('../../icons/magnifier.svg') center / contain no-repeat;
+  transform: translate(-50%, -50%);
+}
+
+/* facets (source: .parts-facet); headers are centered on mobile */
+.cards-deals .cards-deals-facets {
+  margin: 0;
+}
+
+.cards-deals .cards-deals-facet {
+  margin: 0 0 8px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--light-color);
+}
+
+.cards-deals .cards-deals-facet:first-child {
+  border-top: 1px solid var(--light-color);
+}
+
+.cards-deals .cards-deals-facet:last-child {
+  margin-bottom: 0;
+}
+
+.cards-deals .cards-deals-facet-toggle {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  padding: 8px 0 4px;
+  border: 0;
+  background: none;
+  color: var(--cards-deals-muted);
+  font-family: var(--heading-font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: var(--heading-font-weight);
+  line-height: 1.6;
+  text-align: center;
+  cursor: pointer;
+}
+
+.cards-deals .cards-deals-facet-toggle[aria-expanded='true'] {
+  color: var(--link-hover-color);
+}
+
+/* source: a "›" glyph rotated to point down (up while open) */
+.cards-deals .cards-deals-facet-toggle::after {
+  content: '\203A';
+  display: inline-block;
+  margin: 0 8px;
+  font-size: 32px;
+  line-height: 32px;
+  vertical-align: middle;
+  transform: rotate(90deg);
+}
+
+.cards-deals .cards-deals-facet-toggle[aria-expanded='true']::after {
+  transform: rotate(-90deg);
+}
+
+.cards-deals .cards-deals-facet-options {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.cards-deals .cards-deals-facet-options ul {
+  margin: 0;
+  padding: 16px 16px 0;
+  list-style: none;
+}
+
+/* 24px rows keep each checkbox and label at the minimum target spacing (WCAG 2.5.8) */
+.cards-deals .cards-deals-facet-options li {
+  display: flex;
+  align-items: flex-start;
+  min-height: 24px;
+}
+
+.cards-deals .cards-deals-facet-options input[type='checkbox'] {
+  flex: 0 0 auto;
+  width: 13px;
+  height: 13px;
+  margin: 4px 0 0;
+}
+
+.cards-deals .cards-deals-facet-options label {
+  flex: 1 1 auto;
+  padding-left: 6.4px;
+  color: var(--text-color);
+  font-size: 12.8px;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+/* Sort By (source: .offer-sortby) */
+.cards-deals .cards-deals-sort {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 16px;
+}
+
+.cards-deals .cards-deals-sort label {
+  flex: 0 0 auto;
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+}
+
+/* source: .select-wrapper border with a 12x9 triangle 10px from the right */
+.cards-deals .cards-deals-sort select {
+  flex: 1 1 0%;
+  min-width: 0;
+  box-sizing: border-box;
+  height: 34px;
+  margin: 0;
+  padding: 4px 32px 4px 8px;
+  border: 1px solid var(--cards-deals-muted);
+  border-radius: 3px;
+  background: var(--background-color) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='9' viewBox='0 0 12 9'%3E%3Cpath d='M0 0h12L6 9z' fill='%23444141'/%3E%3C/svg%3E") no-repeat right 10px top 12px;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  line-height: 24px;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* deal list (source: .promo-content); only matching cards are rendered, so nth-child
+   alternates over the visible cards */
+.cards-deals .cards-deals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cards-deals .cards-deals-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--dark-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  text-align: center;
+}
+
+.cards-deals .cards-deals-card:nth-child(even) {
+  border: 0;
+  background-color: var(--cards-deals-dark);
+  color: #fff;
+}
+
+.cards-deals .cards-deals-info {
+  min-width: 0;
+  max-width: 256px;
+}
+
+.cards-deals .cards-deals-title {
+  margin: 0 0 4.68px;
+  color: inherit;
+  font-family: var(--body-font-family);
+  font-size: 18.72px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.cards-deals .cards-deals-info p {
+  margin: 0;
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+}
+
+.cards-deals .cards-deals-amount {
+  flex: 0 0 auto;
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.cards-deals .cards-deals-amount-value sup {
+  position: relative;
+  top: -7.5px;
+  font-size: 30px;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.cards-deals .cards-deals-amount-off {
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+.cards-deals .cards-deals-empty {
+  margin: 0 0 16px;
+}
+
+/* breakpoint-exception: source grid switches to sm columns (col-sm-3 / col-sm-9) at 48em */
+@media (width >= 768px) {
+  .cards-deals .cards-deals-layout {
+    flex-direction: row;
+    gap: 32px;
+  }
+
+  .cards-deals .cards-deals-sidebar {
+    flex: 0 0 calc(25% - 24px);
+    box-sizing: border-box;
+    min-width: 0;
+    padding-right: 16px;
+    border-right: 1px solid var(--light-color);
+  }
+
+  .cards-deals .cards-deals-count {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+
+  .cards-deals .cards-deals-filter-toggle {
+    display: none;
+  }
+
+  .cards-deals .cards-deals-panel,
+  .cards-deals .cards-deals-sidebar:not(.is-open) .cards-deals-panel {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .cards-deals .cards-deals-search {
+    margin-bottom: 12px;
+  }
+
+  .cards-deals .cards-deals-facet {
+    padding-bottom: 0;
+  }
+
+  .cards-deals .cards-deals-facet-toggle {
+    width: auto;
+    height: 36px;
+    padding: 4px 0 0;
+    text-align: left;
+  }
+
+  .cards-deals .cards-deals-facet-options {
+    background-color: var(--background-color);
+  }
+
+  .cards-deals .cards-deals-facet-options ul {
+    padding: 4px 0 12px;
+  }
+
+  .cards-deals .cards-deals-facet-options label {
+    margin-top: 3.2px;
+  }
+
+  .cards-deals .cards-deals-results {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+
+  /* source: the sort control fills the right half of the results header */
+  .cards-deals .cards-deals-sort {
+    width: calc(50% - 16px);
+    margin-left: auto;
+  }
+
+  .cards-deals .cards-deals-card {
+    flex-direction: row;
+    gap: 24px;
+    text-align: start;
+  }
+
+  .cards-deals .cards-deals-info {
+    margin-right: auto;
+  }
+
+  .cards-deals .cards-deals-amount {
+    font-size: 38px;
+  }
+
+  .cards-deals .cards-deals-amount-off {
+    font-size: 30px;
+  }
+}

@@ -25,9 +25,17 @@ export default function transform(hookName, element, payload) {
     removeAll(element, ['.media-center > .row.media-desktop']);
     // performance membership: the divider row is drawn by the "divider" section style
     removeAll(element, ['.container-fluid:has(> .row.performance-line)', '.row.performance-line']);
+    // deals: the cards-deals block rebuilds the finder UI (sort, mobile filter button, sidebar)
+    removeAll(element, ['#offer-search .pagination-header', '#offer-search .show-offers-btn']);
     // pages these link to aren't migrated (media center articles/downloads, membership sign-up
-    // and log-in), so link them on trpparts.com
-    element.querySelectorAll('.media-center a[href^="/"], .hero-banner.large a[href^="/"], .performance-list a[href^="/"]').forEach((a) => {
+    // and log-in, deals sign-up and local offers), so link them on trpparts.com
+    element.querySelectorAll([
+      '.media-center a[href^="/"]',
+      '.hero-banner.large a[href^="/"]',
+      '.performance-list a[href^="/"]',
+      '.header-content-wrapper a[href^="/"]',
+      '#offer-search .local-deals a[href^="/"]',
+    ].join(', ')).forEach((a) => {
       a.setAttribute('href', new URL(a.getAttribute('href'), 'https://www.trpparts.com/').href);
     });
 

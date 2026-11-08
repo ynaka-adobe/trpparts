@@ -140,6 +140,70 @@
       "urlPattern": "/"
     },
     {
+      "name": "deals",
+      "urls": [
+        "https://www.trpparts.com/deals/"
+      ],
+      "representativeUrl": "https://www.trpparts.com/deals/",
+      "description": "Deals: red header band (H1 + intro), deals finder (search, filters, sort, deal cards), local offers button, Where To Buy strip",
+      "blocks": [
+        {
+          "name": "cards-deals",
+          "instances": [
+            "#offers-container"
+          ]
+        },
+        {
+          "name": "columns-retailer",
+          "instances": [
+            "section.retailer-search"
+          ]
+        }
+      ],
+      "urlPattern": "/*",
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Everyday Savings header band",
+          "selector": [
+            "div.header:has(> .header-content-wrapper)"
+          ],
+          "style": "red-dark-gradient, centered",
+          "blocks": [],
+          "defaultContent": [
+            "div.header:has(> .header-content-wrapper) h1",
+            "div.header:has(> .header-content-wrapper) p"
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Deals finder",
+          "selector": [
+            "section.parts-list-content"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-deals"
+          ],
+          "defaultContent": [
+            ".local-deals a.button"
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Where To Buy / Buy Online",
+          "selector": [
+            "section.retailer-search"
+          ],
+          "style": "red",
+          "blocks": [
+            "columns-retailer"
+          ],
+          "defaultContent": []
+        }
+      ]
+    },
+    {
       "name": "media-center",
       "urls": [
         "https://www.trpparts.com/media-center/"
