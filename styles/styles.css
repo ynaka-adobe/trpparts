@@ -303,6 +303,99 @@ main nav.breadcrumbs a:focus-visible {
   text-decoration: underline;
 }
 
+/* media center: list sections (style "half" pairs and the downloads section) */
+main > .section.half,
+main > .section.cards-downloads-container {
+  padding: 32px 0 0;
+}
+
+main > .section.half > div,
+main > .section.cards-downloads-container > div {
+  padding: 0 32px;
+}
+
+/* the "VIEW ALL ..." button under each list */
+main > .section.half > .default-content-wrapper:last-child,
+main > .section.cards-downloads-container > .default-content-wrapper:last-child {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  text-align: center;
+}
+
+main > .section.half > .default-content-wrapper:last-child p,
+main > .section.cards-downloads-container > .default-content-wrapper:last-child p {
+  margin: 0;
+}
+
+main > .section.half > .default-content-wrapper:has(> h2:first-child),
+main > .section.cards-downloads-container > .default-content-wrapper:has(> h2:first-child) {
+  padding-top: 0;
+}
+
+main > .section.half h2,
+main > .section.cards-downloads-container h2 {
+  margin-bottom: 23px;
+  font-family: var(--condensed-font-family);
+  font-size: var(--heading-font-size-xxl-condensed);
+  font-weight: 500;
+  line-height: 1.375;
+}
+
+main > .section.cards-downloads-container {
+  padding-bottom: 32px;
+}
+
+/* breakpoint-exception: the source puts the two lists side by side from 1025px (its md grid) */
+@media (width >= 1025px) {
+  main:has(> .section.half) {
+    display: grid;
+    grid-template-columns: 25px 1fr 1fr 39px;
+  }
+
+  main:has(> .section.half) > * {
+    grid-column: 1 / -1;
+  }
+
+  /* the space above sits outside the divider, which starts at the headings like the source */
+  main > .section.half {
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+    padding-top: 0;
+  }
+
+  main > .section.half:has(+ .section.half) {
+    grid-column: 2;
+    border-right: 1px solid var(--divider-color);
+  }
+
+  main > .section.half + .section.half {
+    grid-column: 3;
+  }
+
+  /* no auto margins here: in the column flexbox they would spread the free space between children */
+  main > .section.half > div {
+    width: 100%;
+    margin: 0;
+    padding: 0 16px;
+  }
+
+  /* buttons line up at the bottom of both columns, right-aligned */
+  main > .section.half > .default-content-wrapper:last-child {
+    margin-top: auto;
+    text-align: right;
+  }
+
+  main > .section.cards-downloads-container > div {
+    padding: 0 55px 0 41px;
+  }
+
+  main > .section.cards-downloads-container > .default-content-wrapper:last-child {
+    padding-right: 87px;
+    text-align: right;
+  }
+}
+
 /* section metadata */
 main .section.light,
 main .section.highlight {

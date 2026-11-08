@@ -9,6 +9,7 @@
   --link-color: #06539c;
   --link-hover-color: #b51c16;
   --breadcrumb-color: #757575;
+  --divider-color: #eaeaea;
   --brand-blue: #06539c;
   --brand-blue-light: #1f6ebb;
   --brand-red: #ca1f18;
@@ -32,6 +33,7 @@
   /* heading sizes */
   --heading-font-size-xxl: 32px;
   --heading-font-size-xl: 24px;
+  --heading-font-size-xxl-condensed: 28px;
   --heading-font-size-l: 18.72px;
   --heading-font-size-m: 16px;
   --heading-font-size-s: 13.28px;

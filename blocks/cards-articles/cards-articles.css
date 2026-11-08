@@ -1,0 +1,166 @@
+/* cards-articles: recent articles / press releases list
+   (source: /media-center/ .media-column > ul.media-items, a flexboxgrid row per item) */
+
+.cards-articles > ul {
+  margin: 0;
+  padding: 0 0 32px 16px;
+  list-style: none;
+}
+
+/* each item is the source's grid row: 16px gutters, columns stacked below 768px */
+.cards-articles .cards-articles-item {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 16px 0 32px;
+}
+
+.cards-articles .cards-articles-item:last-child {
+  padding-bottom: 16px;
+}
+
+.cards-articles .cards-articles-card-image,
+.cards-articles .cards-articles-card-body {
+  box-sizing: border-box;
+  flex: 0 0 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0 16px;
+}
+
+.cards-articles .cards-articles-card-image {
+  text-align: center;
+}
+
+.cards-articles .cards-articles-card-image-empty {
+  display: none;
+}
+
+.cards-articles .cards-articles-card-image p {
+  margin: 0;
+}
+
+.cards-articles .cards-articles-thumbnail {
+  display: inline;
+}
+
+/* the source thumbnails are 300px files shown at natural size, capped by the column */
+.cards-articles .cards-articles-card-image img {
+  display: inline;
+  width: 300px;
+  max-width: 100%;
+  height: auto;
+  vertical-align: bottom;
+}
+
+.cards-articles .cards-articles-card-body {
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+}
+
+.cards-articles .cards-articles-title {
+  margin: 10px 0 0;
+  color: #666;
+  font-family: var(--body-font-family);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.375;
+}
+
+.cards-articles .cards-articles-title a:any-link {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
+.cards-articles .cards-articles-title a:hover,
+.cards-articles .cards-articles-title a:focus-visible {
+  color: var(--link-hover-color);
+  text-decoration: none;
+}
+
+.cards-articles .cards-articles-title sup {
+  position: relative;
+  top: -0.4em;
+  font-size: 0.7em;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.cards-articles .cards-articles-card-body p {
+  margin: 8px 0 0;
+}
+
+.cards-articles .cards-articles-card-body p.cards-articles-date {
+  margin: 7px 0;
+  font-size: var(--body-font-size-s);
+}
+
+/* READ MORE: 0.75em, semibold, uppercase, underlined, with a chevron after it */
+.cards-articles a.cards-articles-more:any-link {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link-color);
+  font-size: 0.75em;
+  font-weight: 600;
+  text-decoration: underline;
+  text-transform: uppercase;
+  white-space: normal;
+}
+
+/* " about <title>" inside READ MORE: read by assistive tech, not shown */
+.cards-articles .cards-articles-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.cards-articles a.cards-articles-more::after {
+  content: '›';
+  display: inline-block;
+  margin-left: 0.375em;
+  vertical-align: middle;
+  text-decoration: none;
+}
+
+.cards-articles a.cards-articles-more:hover,
+.cards-articles a.cards-articles-more:focus-visible {
+  color: var(--link-hover-color);
+  text-decoration: none;
+}
+
+/* breakpoint-exception: the source grid puts the thumbnail (3/12) beside the text (9/12) from 768px */
+@media (width >= 768px) {
+  .cards-articles .cards-articles-item {
+    margin: 0 -16px;
+    padding: 0 0 32px;
+  }
+
+  .cards-articles .cards-articles-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .cards-articles .cards-articles-card-image {
+    flex-basis: 25%;
+    max-width: 25%;
+  }
+
+  .cards-articles .cards-articles-card-body {
+    flex-basis: 75%;
+    max-width: 75%;
+  }
+}
+
+/* breakpoint-exception: the source drops the title's top margin with its md grid (1025px) */
+@media (width >= 1025px) {
+  .cards-articles .cards-articles-title {
+    margin-top: 0;
+  }
+}

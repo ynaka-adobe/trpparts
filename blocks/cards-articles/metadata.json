@@ -1,0 +1,51 @@
+{
+  "variantName": "cards-articles",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-11-07T19:12:34.000Z",
+  "canonicalModel": "standalone",
+  "options": [],
+  "memberVariantIds": [],
+  "sourceContext": {
+    "originUrl": "https://www.trpparts.com/media-center/",
+    "originPage": "TRP Media Center",
+    "blockPosition": "top"
+  },
+  "visualCharacteristics": {
+    "sections": [
+      "Recent Articles (left half)",
+      "Recent Press Releases (right half)"
+    ],
+    "colorScheme": "light",
+    "density": "medium",
+    "purpose": "short list of recent articles or press releases linking to their detail pages",
+    "imagePattern": "thumbnail",
+    "description": "Vertical list: thumbnail (~3/12 column, linked to the detail page) beside a linked H3 title, date, and teaser ending in a small bold uppercase underlined READ MORE link with a chevron; stacks on mobile."
+  },
+  "contentPattern": {
+    "structure": "one row per item (newest first); cell 1 = thumbnail image (optionally wrapped in a link to the detail page); cell 2 = H3 with the title linked to the detail page, a date paragraph, a teaser paragraph ending with a READ MORE link to the same page",
+    "buttonCount": 0,
+    "imageCount": 1,
+    "hasDescription": true,
+    "notes": "An unlinked thumbnail is linked to the title link by the block. The READ MORE link gets the accessible name \"Read more about <title>\". The H2 above and the VIEW ALL button below stay default content."
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "recent articles / news lists",
+      "press release lists",
+      "any dated list of linked teasers with a thumbnail"
+    ],
+    "notSuitableFor": [
+      "searchable or faceted lists (use cards-resources)",
+      "image-only tiles (use cards-offers)",
+      "video cards (use cards-video)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/media-center"
+    ],
+    "reuseCount": 2,
+    "lastUsed": "2026-11-07T19:12:34.000Z"
+  }
+}

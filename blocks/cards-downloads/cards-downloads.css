@@ -1,0 +1,118 @@
+/* cards-downloads: downloadable image cards with size links
+   (source: /media-center/ ul.media-items.featured-downloads) */
+
+/* source: flex-flow wrap, left aligned, padding 0 0 2em 16px */
+.cards-downloads > ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0 0 32px 16px;
+  list-style: none;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+}
+
+/* one card per row on phones, two up to 1024px, three above (source: 100% / 50% / 33.3%) */
+.cards-downloads .cards-downloads-item {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 0 8px 16px;
+}
+
+/* breakpoint-exception: the source switches 1 -> 2 columns at 481px (30em) */
+@media (width >= 481px) {
+  .cards-downloads .cards-downloads-item {
+    flex-basis: 50%;
+  }
+}
+
+/* breakpoint-exception: the source switches 2 -> 3 columns at 1025px (64em) */
+@media (width >= 1025px) {
+  .cards-downloads .cards-downloads-item {
+    flex-basis: 33.3%;
+  }
+}
+
+.cards-downloads .cards-downloads-card-image {
+  line-height: 0;
+}
+
+.cards-downloads .cards-downloads-card-image-empty {
+  display: none;
+}
+
+.cards-downloads .cards-downloads-card-image p {
+  margin: 0;
+}
+
+.cards-downloads .cards-downloads-card-image picture {
+  display: block;
+}
+
+/* thumbnails are 300x225 (4:3) and scale to the card width */
+.cards-downloads .cards-downloads-card-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.cards-downloads .cards-downloads-title {
+  margin: 8px 0;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* the source's sup is 12px with no line height, so it does not grow the line */
+.cards-downloads .cards-downloads-title sup {
+  font-size: 0.75em;
+  line-height: 0;
+}
+
+/* format rows: label | link | link. The source uses a -16px row with three
+   16px-padded thirds; three equal columns with a 32px gap give the same offsets. */
+.cards-downloads .cards-downloads-format {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 32px;
+  padding-bottom: 7px;
+  color: #666;
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.cards-downloads .cards-downloads-format-label {
+  grid-column: 1;
+}
+
+.cards-downloads .cards-downloads-format a:first-of-type {
+  grid-column: 2;
+}
+
+.cards-downloads a.cards-downloads-link:any-link {
+  display: inline;
+  justify-self: start;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link-color);
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+  text-decoration: underline;
+  text-transform: none;
+}
+
+.cards-downloads a.cards-downloads-link:hover,
+.cards-downloads a.cards-downloads-link:focus-visible {
+  color: var(--link-hover-color);
+}

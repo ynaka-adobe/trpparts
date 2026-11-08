@@ -21,6 +21,13 @@ const TRACKING_ATTRS = [
 
 export default function transform(hookName, element, payload) {
   if (hookName === 'beforeTransform') {
+    // media center: the "VIEW ALL" buttons are repeated in a desktop-only row; keep the in-column copies
+    removeAll(element, ['.media-center > .row.media-desktop']);
+    // media center: articles, press releases and downloads aren't migrated, so link them on trpparts.com
+    element.querySelectorAll('.media-center a[href^="/"]').forEach((a) => {
+      a.setAttribute('href', new URL(a.getAttribute('href'), 'https://www.trpparts.com/').href);
+    });
+
     // Global chrome, popups, cookie consent, widgets (things that could confuse block matching)
     removeAll(element, [
       '#top > header',

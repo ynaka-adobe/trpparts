@@ -129,14 +129,16 @@ function decorateSections(main) {
 }
 
 /**
- * Adds a "Home › {page title}" breadcrumb at the top of the first section
+ * Adds a "Home › {breadcrumb title or page title}" breadcrumb at the top of the first section
  * (pages with metadata breadcrumbs: true).
  * @param {Element} main The container element
  */
 function buildBreadcrumbs(main) {
   const first = main.querySelector(':scope > div');
   if (!first) return;
-  const title = getMetadata('og:title') || main.querySelector('h1')?.textContent || document.title;
+  // the trail label can differ from the page title (metadata breadcrumb-title, e.g. "Media")
+  const title = getMetadata('breadcrumb-title') || getMetadata('og:title')
+    || main.querySelector('h1')?.textContent || document.title;
   const nav = document.createElement('nav');
   nav.className = 'breadcrumbs';
   nav.setAttribute('aria-label', 'Breadcrumb');
