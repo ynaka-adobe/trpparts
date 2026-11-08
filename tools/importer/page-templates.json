@@ -140,70 +140,6 @@
       "urlPattern": "/"
     },
     {
-      "name": "deals",
-      "urls": [
-        "https://www.trpparts.com/deals/"
-      ],
-      "representativeUrl": "https://www.trpparts.com/deals/",
-      "description": "Deals: red header band (H1 + intro), deals finder (search, filters, sort, deal cards), local offers button, Where To Buy strip",
-      "blocks": [
-        {
-          "name": "cards-deals",
-          "instances": [
-            "#offers-container"
-          ]
-        },
-        {
-          "name": "columns-retailer",
-          "instances": [
-            "section.retailer-search"
-          ]
-        }
-      ],
-      "urlPattern": "/*",
-      "sections": [
-        {
-          "id": "section-1",
-          "name": "Everyday Savings header band",
-          "selector": [
-            "div.header:has(> .header-content-wrapper)"
-          ],
-          "style": "red-dark-gradient, centered",
-          "blocks": [],
-          "defaultContent": [
-            "div.header:has(> .header-content-wrapper) h1",
-            "div.header:has(> .header-content-wrapper) p"
-          ]
-        },
-        {
-          "id": "section-2",
-          "name": "Deals finder",
-          "selector": [
-            "section.parts-list-content"
-          ],
-          "style": null,
-          "blocks": [
-            "cards-deals"
-          ],
-          "defaultContent": [
-            ".local-deals a.button"
-          ]
-        },
-        {
-          "id": "section-3",
-          "name": "Where To Buy / Buy Online",
-          "selector": [
-            "section.retailer-search"
-          ],
-          "style": "red",
-          "blocks": [
-            "columns-retailer"
-          ],
-          "defaultContent": []
-        }
-      ]
-    },
-    {
       "name": "media-center",
       "urls": [
         "https://www.trpparts.com/media-center/"
@@ -304,12 +240,76 @@
       "urlPattern": "/*"
     },
     {
+      "name": "deals",
+      "urls": [
+        "https://www.trpparts.com/deals/"
+      ],
+      "representativeUrl": "https://www.trpparts.com/deals/",
+      "description": "To be named in naming step",
+      "blocks": [
+        {
+          "name": "cards-deals",
+          "instances": [
+            "#offers-container"
+          ]
+        },
+        {
+          "name": "columns-retailer",
+          "instances": [
+            "section.retailer-search"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Everyday Savings header band",
+          "selector": [
+            "div.header:has(> .header-content-wrapper)"
+          ],
+          "style": "red-dark-gradient, centered",
+          "blocks": [],
+          "defaultContent": [
+            "div.header:has(> .header-content-wrapper) h1",
+            "div.header:has(> .header-content-wrapper) p"
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Deals finder",
+          "selector": [
+            "section.parts-list-content"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-deals"
+          ],
+          "defaultContent": [
+            ".local-deals a.button"
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Where To Buy / Buy Online",
+          "selector": [
+            "section.retailer-search"
+          ],
+          "style": "red",
+          "blocks": [
+            "columns-retailer"
+          ],
+          "defaultContent": []
+        }
+      ],
+      "urlPattern": "/*"
+    },
+    {
       "name": "performance-membership",
       "urls": [
         "https://www.trpparts.com/performance-membership/"
       ],
       "representativeUrl": "https://www.trpparts.com/performance-membership/",
-      "description": "Performance Membership: promo banner, Online Rewards Program (image + list + sign-up/log-in buttons), image/text bands, Where To Buy strip",
+      "description": "To be named in naming step",
       "blocks": [
         {
           "name": "hero-banner",
@@ -331,7 +331,6 @@
           ]
         }
       ],
-      "urlPattern": "/*",
       "sections": [
         {
           "id": "section-1",
@@ -381,7 +380,8 @@
           ],
           "defaultContent": []
         }
-      ]
+      ],
+      "urlPattern": "/*"
     },
     {
       "name": "resources",
@@ -434,6 +434,71 @@
         }
       ],
       "urlPattern": "/*"
+    },
+    {
+      "name": "about-us",
+      "urls": [
+        "https://www.trpparts.com/about-us/"
+      ],
+      "representativeUrl": "https://www.trpparts.com/about-us/",
+      "description": "About Us: H1, tagline, image/text bands (Trusted, Reliable, Proven), all-makes list, Where To Buy strip",
+      "blocks": [
+        {
+          "name": "columns-media",
+          "instances": [
+            ".about-us-bands"
+          ]
+        },
+        {
+          "name": "columns-retailer",
+          "instances": [
+            "section.retailer-search"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Intro + Trusted / Reliable / Proven",
+          "selector": [
+            "section.subpage-content"
+          ],
+          "style": "blue-headings, divider",
+          "blocks": [
+            "columns-media"
+          ],
+          "defaultContent": [
+            "section.subpage-content h1",
+            ".about-us > h2.campaign-headline"
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Aftermarket parts for all makes",
+          "selector": [
+            ".about-us > h2:not(.campaign-headline)"
+          ],
+          "style": "blue-headings, list-columns",
+          "blocks": [],
+          "defaultContent": [
+            ".about-us > h2:not(.campaign-headline)",
+            ".about-us > h2 ~ p",
+            "ul.about-us-makes"
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Where To Buy / Buy Online",
+          "selector": [
+            "section.retailer-search"
+          ],
+          "style": "red",
+          "blocks": [
+            "columns-retailer"
+          ],
+          "defaultContent": []
+        }
+      ]
     }
   ]
 }

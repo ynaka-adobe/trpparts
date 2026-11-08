@@ -27,14 +27,25 @@ export default function transform(hookName, element, payload) {
     removeAll(element, ['.container-fluid:has(> .row.performance-line)', '.row.performance-line']);
     // deals: the cards-deals block rebuilds the finder UI (sort, mobile filter button, sidebar)
     removeAll(element, ['#offer-search .pagination-header', '#offer-search .show-offers-btn']);
+    // about us: the rule under the bands is drawn by the "divider" section style; the three
+    // image/text rows are siblings, so group them for the columns-media parser
+    removeAll(element, ['.about-us > hr']);
+    const aboutRows = [...element.querySelectorAll('.about-us > .row')];
+    if (aboutRows.length) {
+      const bands = element.ownerDocument.createElement('div');
+      bands.className = 'about-us-bands';
+      aboutRows[0].before(bands);
+      bands.append(...aboutRows);
+    }
     // pages these link to aren't migrated (media center articles/downloads, membership sign-up
-    // and log-in, deals sign-up and local offers), so link them on trpparts.com
+    // and log-in, deals sign-up and local offers, about-us parts), so link them on trpparts.com
     element.querySelectorAll([
       '.media-center a[href^="/"]',
       '.hero-banner.large a[href^="/"]',
       '.performance-list a[href^="/"]',
       '.header-content-wrapper a[href^="/"]',
       '#offer-search .local-deals a[href^="/"]',
+      '.about-us a[href^="/"]',
     ].join(', ')).forEach((a) => {
       a.setAttribute('href', new URL(a.getAttribute('href'), 'https://www.trpparts.com/').href);
     });

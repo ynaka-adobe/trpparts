@@ -256,11 +256,21 @@ main > .section > .default-content-wrapper:has(> h2:first-child) {
   padding-top: var(--section-padding);
 }
 
-/* page title (subpages): the source sets it in the book weight, not the hero's bold */
+/* page title (subpages): the source sets it in the book weight, not the hero's bold;
+   30px on phones, 32px from its 48em (768px) grid */
 main > .section > .default-content-wrapper > h1 {
   margin: 12px 0 8px;
+  font-size: 30px;
   font-weight: 400;
-  line-height: 44px;
+  line-height: 1.375;
+}
+
+/* breakpoint-exception: the source subpage title steps up at 768px */
+@media (width >= 768px) {
+  main > .section > .default-content-wrapper > h1 {
+    font-size: var(--heading-font-size-xxl);
+    line-height: 44px;
+  }
 }
 
 /* breadcrumb (metadata breadcrumbs: true), desktop only like the source */
@@ -451,6 +461,47 @@ main .section.divider::after {
   max-width: calc(var(--content-max-width) - 2 * var(--content-inset));
   margin: 22px auto 0;
   border-bottom: 1px solid var(--rule-color);
+}
+
+/* blue uppercase section headings (about us: tagline and "Aftermarket parts for all makes") */
+/* stylelint-disable-next-line no-descending-specificity -- different elements from the earlier rules */
+main .section.blue-headings .default-content-wrapper > h2 {
+  margin: 20px 0;
+  color: var(--link-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-xl);
+  font-weight: 600;
+  line-height: 1.375;
+  text-transform: uppercase;
+}
+
+/* the heading's own margin is the gap under the previous section (no extra section padding) */
+main > .section.blue-headings > .default-content-wrapper:has(> h2:first-child) {
+  padding-top: 0;
+}
+
+/* a plain list flowed into columns (about us: the makes TRP covers) */
+main .section.list-columns .default-content-wrapper > ul {
+  padding: 0;
+  list-style: none;
+  column-count: 2;
+}
+
+main .section.list-columns .default-content-wrapper > ul > li {
+  break-inside: avoid;
+}
+
+/* breakpoint-exception: the source list has 3 columns from 768px and 4 above 1024px */
+@media (width >= 768px) {
+  main .section.list-columns .default-content-wrapper > ul {
+    column-count: 3;
+  }
+}
+
+@media (width >= 1025px) {
+  main .section.list-columns .default-content-wrapper > ul {
+    column-count: 4;
+  }
 }
 
 main .section.centered {

@@ -276,12 +276,21 @@ var CustomImportScript = (() => {
       removeAll(element, [".media-center > .row.media-desktop"]);
       removeAll(element, [".container-fluid:has(> .row.performance-line)", ".row.performance-line"]);
       removeAll(element, ["#offer-search .pagination-header", "#offer-search .show-offers-btn"]);
+      removeAll(element, [".about-us > hr"]);
+      const aboutRows = [...element.querySelectorAll(".about-us > .row")];
+      if (aboutRows.length) {
+        const bands = element.ownerDocument.createElement("div");
+        bands.className = "about-us-bands";
+        aboutRows[0].before(bands);
+        bands.append(...aboutRows);
+      }
       element.querySelectorAll([
         '.media-center a[href^="/"]',
         '.hero-banner.large a[href^="/"]',
         '.performance-list a[href^="/"]',
         '.header-content-wrapper a[href^="/"]',
-        '#offer-search .local-deals a[href^="/"]'
+        '#offer-search .local-deals a[href^="/"]',
+        '.about-us a[href^="/"]'
       ].join(", ")).forEach((a) => {
         a.setAttribute("href", new URL(a.getAttribute("href"), "https://www.trpparts.com/").href);
       });

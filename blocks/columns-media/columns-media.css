@@ -24,6 +24,15 @@
   order: 1;
 }
 
+/* image-first: the image sits above the text in every row while stacked
+   (source About Us: first-xs on the image column, authored order from 768px);
+   it keeps its natural size (287px), left-aligned and capped by the column
+   (a plain <p><img> in the source col-xs-12, no centering) */
+.columns-media.image-first .columns-media-img-col {
+  order: -1;
+  text-align: start;
+}
+
 .columns-media .columns-media-img-col p {
   margin: 0;
 }
@@ -41,7 +50,7 @@
 }
 
 /* default (photo) rows: the source photo carries margin-top: 1.5em */
-.columns-media:not(.text-first) .columns-media-img-col img {
+.columns-media:not(.text-first, .image-first) .columns-media-img-col img {
   margin-top: 24px;
 }
 
@@ -69,6 +78,17 @@
 
 .columns-media .columns-media-text-col p {
   margin: 16px 0;
+}
+
+/* image-first headings (source .about-us h3: 1.625em, #333, browser 1em margins);
+   set in the book weight like the page title */
+.columns-media.image-first .columns-media-text-col h3 {
+  margin: 1em 0;
+  color: #333;
+  font-family: var(--heading-font-family);
+  font-size: 1.625em;
+  font-weight: 400;
+  line-height: 1.375;
 }
 
 /* registered marks sit on the line without opening it up */
@@ -163,8 +183,8 @@
   color: #821310;
 }
 
-/* from 768px: side by side with the source's 32px gutter; image column 5/12 (default)
-   or 4/12 (text-first), text takes the rest; columns align to the top */
+/* from 768px: side by side with the source's 32px gutter; image column 5/12 (default),
+   4/12 (text-first) or 3/12 (image-first), text takes the rest; columns align to the top */
 @media (width >= 768px) {
   .columns-media .columns-media-row {
     flex-direction: row;
@@ -181,8 +201,14 @@
     order: 0;
   }
 
+  /* image-first: image column 3/12, text 9/12, cells in authored order */
+  .columns-media.image-first .columns-media-img-col {
+    flex-basis: calc((100% + 32px) * 3 / 12 - 32px);
+    order: 0;
+  }
+
   /* the photo row ends with the photo (the divider rule sits 22px below it) */
-  .columns-media:not(.text-first) .columns-media-img-col {
+  .columns-media:not(.text-first, .image-first) .columns-media-img-col {
     padding-bottom: 0;
   }
 

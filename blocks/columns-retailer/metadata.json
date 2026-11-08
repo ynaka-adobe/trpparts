@@ -41,9 +41,10 @@
       "/resources/index",
       "/media-center/index",
       "/performance-membership/index",
-      "/deals/index"
+      "/deals/index",
+      "/about-us/index"
     ],
-    "reuseCount": 5,
-    "lastUsed": "2026-11-08T02:28:21.005Z"
+    "reuseCount": 6,
+    "lastUsed": "2026-11-08T04:05:00.000Z"
   }
 }

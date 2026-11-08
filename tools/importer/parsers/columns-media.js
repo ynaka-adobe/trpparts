@@ -12,6 +12,10 @@
  *      order (column with first-sm first, last-sm second); text = h2 + p (sup kept),
  *      image = <img> alone. Emitted as "Columns Media (text-first)": on mobile the source shows
  *      the text above the image in both bands.
+ *   C) div.about-us-bands (wrapper the cleanup transformer builds around the .about-us > .row
+ *      siblings) -> one row per .row, cells in desktop order as in B; text = h3 + p (sup kept,
+ *      inline links kept as plain <a href>), image = <img> alone. Emitted as
+ *      "Columns Media (image-first)".
  * Links keep their href as found (made absolute by the cleanup transformer).
  */
 
@@ -20,7 +24,8 @@ function cleanText(s) {
 }
 
 // Copy an element's inline content (text + <sup>/<sub>/<em>/<strong>) into target, trimmed.
-function copyInline(document, source, target) {
+// keepLinks: inline <a href> are kept as plain links (text only) instead of flattened to text.
+function copyInline(document, source, target, keepLinks = false) {
   source.childNodes.forEach((node) => {
     if (node.nodeType === 3) {
       target.append(document.createTextNode(node.textContent.replace(/\s+/g, ' ')));
@@ -28,6 +33,11 @@ function copyInline(document, source, target) {
       const el = document.createElement(node.tagName.toLowerCase());
       el.textContent = cleanText(node.textContent);
       target.append(el);
+    } else if (keepLinks && node.nodeType === 1 && node.tagName === 'A' && node.getAttribute('href')) {
+      const a = document.createElement('a');
+      a.href = node.getAttribute('href');
+      a.textContent = cleanText(node.textContent);
+      target.append(a);
     } else if (node.nodeType === 1) {
       target.append(document.createTextNode(cleanText(node.textContent)));
     }
@@ -94,26 +104,24 @@ function parseList(element, document) {
   return [[imageCell(document, imgCol), text]];
 }
 
-function textCell(document, col) {
+function textCell(document, col, keepLinks = false) {
   const text = [];
   col.querySelectorAll('h1, h2, h3, h4, p').forEach((el) => {
     if (el.querySelector('img')) return;
     if (!cleanText(el.textContent)) return;
-    text.push(copyInline(document, el, document.createElement(el.tagName.toLowerCase())));
+    text.push(copyInline(document, el, document.createElement(el.tagName.toLowerCase()), keepLinks));
   });
   return text;
 }
 
-// Shape B: one row per inner .row, columns in desktop (first-sm / last-sm) order
-function parseBands(element, document) {
+// One block row per source .row, columns in desktop (first-sm / last-sm) order
+function bandRows(document, inner, keepLinks = false) {
   const rank = (c) => {
     if (c.classList.contains('first-sm')) return 0;
     if (c.classList.contains('last-sm')) return 2;
     return 1;
   };
   const rows = [];
-  let inner = [...element.querySelectorAll(':scope > .col-xs-12 > .row')];
-  if (!inner.length) inner = [...element.querySelectorAll('.row')];
   inner.forEach((row) => {
     const cols = [...row.querySelectorAll(':scope > [class*="col-"]')]
       .map((c, i) => ({ c, i }))
@@ -121,14 +129,34 @@ function parseBands(element, document) {
       .map(({ c }) => c);
     const cells = cols.map((c) => (c.querySelector('img') && !c.querySelector('h1, h2, h3, h4')
       ? imageCell(document, c)
-      : textCell(document, c)));
+      : textCell(document, c, keepLinks)));
     while (cells.length < 2) cells.push('');
     if (cells.some((c) => c && c.length)) rows.push(cells.slice(0, 2));
   });
   return rows;
 }
 
+// Shape B: inner rows of the full-width column
+function parseBands(element, document) {
+  let inner = [...element.querySelectorAll(':scope > .col-xs-12 > .row')];
+  if (!inner.length) inner = [...element.querySelectorAll('.row')];
+  return bandRows(document, inner);
+}
+
+// Shape C: about-us bands (sibling .row elements grouped by the cleanup transformer)
+function parseAbout(element, document) {
+  return bandRows(document, [...element.querySelectorAll(':scope > .row')], true);
+}
+
 export default function parse(element, { document }) {
+  if (element.classList.contains('about-us-bands')) {
+    const block = WebImporter.Blocks.createBlock(document, {
+      name: 'columns-media (image-first)',
+      cells: parseAbout(element, document),
+    });
+    element.replaceWith(block);
+    return;
+  }
   const isList = !!element.querySelector('.performance-list-img, .performance-list');
   const cells = isList ? parseList(element, document) : parseBands(element, document);
   // the bands stack text-first on mobile whichever side the image is on (source DOM order)

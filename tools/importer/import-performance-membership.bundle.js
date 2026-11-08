@@ -161,7 +161,7 @@ var CustomImportScript = (() => {
   function cleanText2(s) {
     return (s || "").replace(/\s+/g, " ").trim();
   }
-  function copyInline2(document2, source, target) {
+  function copyInline2(document2, source, target, keepLinks = false) {
     source.childNodes.forEach((node) => {
       if (node.nodeType === 3) {
         target.append(document2.createTextNode(node.textContent.replace(/\s+/g, " ")));
@@ -169,6 +169,11 @@ var CustomImportScript = (() => {
         const el = document2.createElement(node.tagName.toLowerCase());
         el.textContent = cleanText2(node.textContent);
         target.append(el);
+      } else if (keepLinks && node.nodeType === 1 && node.tagName === "A" && node.getAttribute("href")) {
+        const a = document2.createElement("a");
+        a.href = node.getAttribute("href");
+        a.textContent = cleanText2(node.textContent);
+        target.append(a);
       } else if (node.nodeType === 1) {
         target.append(document2.createTextNode(cleanText2(node.textContent)));
       }
@@ -230,33 +235,47 @@ var CustomImportScript = (() => {
     }
     return [[imageCell(document2, imgCol), text]];
   }
-  function textCell(document2, col) {
+  function textCell(document2, col, keepLinks = false) {
     const text = [];
     col.querySelectorAll("h1, h2, h3, h4, p").forEach((el) => {
       if (el.querySelector("img")) return;
       if (!cleanText2(el.textContent)) return;
-      text.push(copyInline2(document2, el, document2.createElement(el.tagName.toLowerCase())));
+      text.push(copyInline2(document2, el, document2.createElement(el.tagName.toLowerCase()), keepLinks));
     });
     return text;
   }
-  function parseBands(element, document2) {
+  function bandRows(document2, inner, keepLinks = false) {
     const rank = (c) => {
       if (c.classList.contains("first-sm")) return 0;
       if (c.classList.contains("last-sm")) return 2;
       return 1;
     };
     const rows = [];
-    let inner = [...element.querySelectorAll(":scope > .col-xs-12 > .row")];
-    if (!inner.length) inner = [...element.querySelectorAll(".row")];
     inner.forEach((row) => {
       const cols = [...row.querySelectorAll(':scope > [class*="col-"]')].map((c, i) => ({ c, i })).sort((a, b) => rank(a.c) - rank(b.c) || a.i - b.i).map(({ c }) => c);
-      const cells = cols.map((c) => c.querySelector("img") && !c.querySelector("h1, h2, h3, h4") ? imageCell(document2, c) : textCell(document2, c));
+      const cells = cols.map((c) => c.querySelector("img") && !c.querySelector("h1, h2, h3, h4") ? imageCell(document2, c) : textCell(document2, c, keepLinks));
       while (cells.length < 2) cells.push("");
       if (cells.some((c) => c && c.length)) rows.push(cells.slice(0, 2));
     });
     return rows;
   }
+  function parseBands(element, document2) {
+    let inner = [...element.querySelectorAll(":scope > .col-xs-12 > .row")];
+    if (!inner.length) inner = [...element.querySelectorAll(".row")];
+    return bandRows(document2, inner);
+  }
+  function parseAbout(element, document2) {
+    return bandRows(document2, [...element.querySelectorAll(":scope > .row")], true);
+  }
   function parse2(element, { document: document2 }) {
+    if (element.classList.contains("about-us-bands")) {
+      const block2 = WebImporter.Blocks.createBlock(document2, {
+        name: "columns-media (image-first)",
+        cells: parseAbout(element, document2)
+      });
+      element.replaceWith(block2);
+      return;
+    }
     const isList = !!element.querySelector(".performance-list-img, .performance-list");
     const cells = isList ? parseList(element, document2) : parseBands(element, document2);
     const name = isList ? "columns-media" : "columns-media (text-first)";
@@ -334,12 +353,21 @@ var CustomImportScript = (() => {
       removeAll(element, [".media-center > .row.media-desktop"]);
       removeAll(element, [".container-fluid:has(> .row.performance-line)", ".row.performance-line"]);
       removeAll(element, ["#offer-search .pagination-header", "#offer-search .show-offers-btn"]);
+      removeAll(element, [".about-us > hr"]);
+      const aboutRows = [...element.querySelectorAll(".about-us > .row")];
+      if (aboutRows.length) {
+        const bands = element.ownerDocument.createElement("div");
+        bands.className = "about-us-bands";
+        aboutRows[0].before(bands);
+        bands.append(...aboutRows);
+      }
       element.querySelectorAll([
         '.media-center a[href^="/"]',
         '.hero-banner.large a[href^="/"]',
         '.performance-list a[href^="/"]',
         '.header-content-wrapper a[href^="/"]',
-        '#offer-search .local-deals a[href^="/"]'
+        '#offer-search .local-deals a[href^="/"]',
+        '.about-us a[href^="/"]'
       ].join(", ")).forEach((a) => {
         a.setAttribute("href", new URL(a.getAttribute("href"), "https://www.trpparts.com/").href);
       });
