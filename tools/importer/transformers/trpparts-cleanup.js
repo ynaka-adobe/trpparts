@@ -136,6 +136,8 @@ export default function transform(hookName, element, payload) {
       '.article-detail-content a[href^="https://www.trpparts.com/"]',
       '.press-release-detail-content a[href^="/"]',
       '.press-release-detail-content a[href^="https://www.trpparts.com/"]',
+      // any other site link in the page body (e.g. the home page's offers and membership promos)
+      '#mainContent a[href^="/"]',
     ].join(', ')).forEach((a) => {
       a.setAttribute('href', siteHref(a.getAttribute('href')));
     });
