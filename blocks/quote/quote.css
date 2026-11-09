@@ -1,41 +1,26 @@
+/* quote: a pull quote in a media archive article (source: p.the-quote-border, a centered quote
+   between 2px blue rules, the quote itself bold and in capitals, the speaker under it) */
 .quote blockquote {
-  margin: 0 auto;
-  padding: 0 24px;
-  max-width: 900px;
+  margin: 48px 0 16px;
+  padding: 20px 0;
+  border-top: 2px solid var(--link-color);
+  border-bottom: 2px solid var(--link-color);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+  text-align: center;
 }
 
-@media (width >= 900px) {
-  .quote blockquote {
-    padding: 0 32px;
-  }
+.quote blockquote p {
+  margin: 0;
 }
 
 .quote blockquote .quote-quotation {
-  font-size: 120%;
-}
-
-.quote blockquote .quote-quotation > :first-child {
-  text-indent: -0.5ch;
-}
-
-.quote blockquote .quote-quotation > :first-child::before,
-.quote blockquote .quote-quotation > :last-child::after {
-  line-height: 0;
-}
-
-.quote blockquote .quote-quotation > :first-child::before {
-  content: "“";
-}
-
-.quote blockquote .quote-quotation > :last-child::after {
-  content: "”";
-}
-
-.quote blockquote .quote-attribution {
-  text-align: right;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .quote blockquote .quote-attribution > :first-child::before {
-  content: "—";
-  padding-right: 0.5ch;
+  content: '- ';
 }

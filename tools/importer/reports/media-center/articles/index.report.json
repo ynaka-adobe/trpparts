@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.trpparts.com/media-center/articles/",
+  "path": "media-center/articles/index",
+  "timestamp": "2026-11-08T21:55:33.548Z",
+  "title": "Articles",
+  "template": "media-listing",
+  "blocks": [
+    "cards-articles",
+    "columns-retailer"
+  ]
+}

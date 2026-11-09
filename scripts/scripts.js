@@ -137,12 +137,14 @@ function decorateSections(main) {
 function buildBreadcrumbs(main) {
   let first = main.querySelector(':scope > div');
   if (!first) return;
-  // a leading banner keeps the trail below it: a section holding only a block (e.g. a promo
-  // banner) or a colored band (background section style, e.g. a red header with the page title)
-  const blockOnly = [...first.children].every((el) => el.matches('div[class]'));
+  // a leading banner keeps the trail below it: a section holding only a banner block (hero,
+  // carousel, promo banner) or a colored band (background section style, e.g. a red header with
+  // the page title). A page that opens with a plain list block (TRP Downloads) keeps it on top.
+  const bannerOnly = [...first.children].every((el) => el.matches('div[class]'))
+    && Boolean(first.querySelector(':scope > [class*="hero"], :scope > [class*="carousel"], :scope > [class*="banner"]'));
   const styles = toClassName(first.querySelector(':scope > .section-metadata')?.textContent || '');
   const coloredBand = /(^|-)(red|dark|light|highlight)(-|$)/.test(styles);
-  if ((blockOnly || coloredBand) && first.nextElementSibling) first = first.nextElementSibling;
+  if ((bannerOnly || coloredBand) && first.nextElementSibling) first = first.nextElementSibling;
   // the trail label can differ from the page title (metadata breadcrumb-title, e.g. "Media")
   const title = getMetadata('breadcrumb-title') || getMetadata('og:title')
     || main.querySelector('h1')?.textContent || document.title;
@@ -160,12 +162,15 @@ function buildBreadcrumbs(main) {
   // serves pages under /content, which is not part of the trail
   const folders = window.location.pathname.replace(/^\/content(?=\/)/, '')
     .split('/').filter(Boolean).slice(0, -1);
+  // year folders only group archived pages (/media-center/2026/...) and have no page of their own
+  const crumbs = folders.map((folder, i) => ({ folder, href: `/${folders.slice(0, i + 1).join('/')}/` }))
+    .filter(({ folder }) => !/^\d{4}$/.test(folder));
   const parentLabel = getMetadata('breadcrumb-parent');
-  folders.forEach((folder, i) => {
+  crumbs.forEach(({ folder, href }, i) => {
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.href = `/${folders.slice(0, i + 1).join('/')}/`;
-    a.textContent = (i === folders.length - 1 && parentLabel)
+    a.href = href;
+    a.textContent = (i === crumbs.length - 1 && parentLabel)
       || folder.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     li.append(a);
     list.append(li);
@@ -176,6 +181,28 @@ function buildBreadcrumbs(main) {
   list.append(current);
   nav.append(list);
   first.prepend(nav);
+}
+
+/**
+ * Media archive articles: the source floats some product photos right of the text and centers
+ * the other images. Authored images carry no alignment, so the page metadata "image-float" lists
+ * the floated ones by position among the article's images (e.g. "1").
+ * @param {Element} main The container element
+ */
+function decorateArticleImages(main) {
+  if (!document.body.classList.contains('media-article')) return;
+  // the site-wide "main img { width: auto }" leaves an image without a size until it loads; its
+  // own width (Edge Delivery sets width/height) reserves the space so the text doesn't shift
+  main.querySelectorAll('.default-content-wrapper img[width][height]').forEach((img) => {
+    img.style.width = `${img.getAttribute('width')}px`;
+  });
+  const floated = getMetadata('image-float').split(',').map((n) => Number(n.trim())).filter(Boolean);
+  if (!floated.length) return;
+  const images = [...(main.querySelector(':scope > div')?.querySelectorAll('img') || [])];
+  floated.forEach((n) => {
+    const picture = images[n - 1]?.closest('.default-content-wrapper picture');
+    picture?.classList.add('image-right');
+  });
 }
 
 /**
@@ -190,6 +217,7 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  decorateArticleImages(main);
 }
 
 /**

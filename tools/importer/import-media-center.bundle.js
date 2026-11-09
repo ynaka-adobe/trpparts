@@ -71,6 +71,7 @@ var CustomImportScript = (() => {
   }
   function parse(element, { document: document2 }) {
     const cells = [];
+    const archive = Boolean(element.closest("#mediaList"));
     let items = [...element.querySelectorAll(":scope > li.media-item")];
     if (!items.length) items = [...element.querySelectorAll("li.media-item")];
     items.forEach((item) => {
@@ -114,14 +115,15 @@ var CustomImportScript = (() => {
         const teaser = cleanText([...summary.childNodes].filter((n) => !(n.nodeType === 1 && n.tagName === "A")).map((n) => n.textContent).join(" "));
         if (teaser) p.append(document2.createTextNode(`${teaser} `));
         const moreHref = more && more.getAttribute("href") || href;
-        if (moreHref) {
+        if (moreHref && !archive) {
           p.append(makeLink(document2, moreHref, cleanText(more ? more.textContent : "") || "READ MORE"));
         }
         if (cleanText(p.textContent)) content.push(p);
       }
       if (imageCell.length || content.length) cells.push([imageCell, content]);
     });
-    const block = WebImporter.Blocks.createBlock(document2, { name: "cards-articles", cells });
+    const name = archive ? "Cards Articles (years)" : "cards-articles";
+    const block = WebImporter.Blocks.createBlock(document2, { name, cells });
     element.replaceWith(block);
   }
 
@@ -159,7 +161,7 @@ var CustomImportScript = (() => {
     if (!items.length) items = [...element.querySelectorAll("li.media-item")];
     items.forEach((item) => {
       const info = item.querySelector(".video-info");
-      const titleP = info ? info.querySelector(":scope > p") : null;
+      const titleP = info ? info.querySelector(":scope > h2, :scope > h3") || info.querySelector(":scope > p") : null;
       const title = cleanText2(titleP ? titleP.textContent : "");
       const imageCell = [];
       const srcImg = item.querySelector("img");
@@ -198,6 +200,29 @@ var CustomImportScript = (() => {
             });
           });
           if (cleanText2(p.textContent)) content.push(p);
+        });
+        info.querySelectorAll(":scope > p").forEach((line) => {
+          if (line === titleP) return;
+          let p = document2.createElement("p");
+          const flush = () => {
+            if (cleanText2(p.textContent)) content.push(p);
+            p = document2.createElement("p");
+          };
+          line.childNodes.forEach((node) => {
+            if (node.nodeType === 1 && node.tagName === "BR") {
+              flush();
+            } else if (node.nodeType === 1 && node.tagName === "A") {
+              const href = node.getAttribute("href");
+              const text = cleanText2(node.textContent);
+              if (!href || !text) return;
+              if (p.childNodes.length) p.append(document2.createTextNode(" "));
+              p.append(makeLink2(document2, href, text));
+            } else if (cleanText2(node.textContent)) {
+              if (p.childNodes.length) p.append(document2.createTextNode(" "));
+              p.append(document2.createTextNode(cleanText2(node.textContent)));
+            }
+          });
+          flush();
         });
       }
       if (imageCell.length || content.length) cells.push([imageCell, content]);
@@ -255,6 +280,38 @@ var CustomImportScript = (() => {
       root.querySelectorAll(sel).forEach((el) => el.remove());
     });
   }
+  var MIGRATED = [
+    "/",
+    "/resources/",
+    "/media-center/",
+    "/media-center/articles/",
+    "/media-center/press-releases/",
+    "/media-center/trp-downloads/",
+    "/performance-membership/",
+    "/deals/",
+    "/about-us/",
+    "/about-us/warranty/",
+    "/about-us/faqs/",
+    "/local-deals/"
+  ];
+  var MIGRATED_ARTICLE = /^\/media-center\/\d{4}\/[a-z0-9-]+\/$/;
+  function edsPath(pathname) {
+    const segments = pathname.split("/").filter(Boolean).map((s) => {
+      let name = s;
+      try {
+        name = decodeURIComponent(s);
+      } catch (e) {
+      }
+      return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    });
+    return `/${segments.join("/")}${segments.length ? "/" : ""}`;
+  }
+  function siteHref(href) {
+    const url = new URL(href, "https://www.trpparts.com/");
+    if (url.hostname !== "www.trpparts.com" || /\.[a-z0-9]{2,5}$/i.test(url.pathname)) return url.href;
+    const path = edsPath(url.pathname);
+    return MIGRATED.includes(path) || MIGRATED_ARTICLE.test(path) ? `${path}${url.search}${url.hash}` : url.href;
+  }
   var TRACKING_ATTRS = [
     "onclick",
     "onload",
@@ -301,23 +358,19 @@ var CustomImportScript = (() => {
       element.querySelectorAll(".hero-banner.large p").forEach((p) => {
         if (!p.textContent.trim() && !p.querySelector("img, picture, a")) p.remove();
       });
-      const MIGRATED = [
-        "/",
-        "/resources/",
-        "/media-center/",
-        "/performance-membership/",
-        "/deals/",
-        "/about-us/",
-        "/about-us/warranty/",
-        "/about-us/faqs/"
-      ];
       element.querySelectorAll('.footnotes a[href^="/"], dl.faqs-content a[href^="/"]').forEach((a) => {
-        const url = new URL(a.getAttribute("href"), "https://www.trpparts.com/");
-        const path = url.pathname.endsWith("/") ? url.pathname : `${url.pathname}/`;
-        a.setAttribute("href", MIGRATED.includes(path) ? `${path}${url.search}${url.hash}` : url.href);
+        a.setAttribute("href", siteHref(a.getAttribute("href")));
         a.removeAttribute("title");
         a.removeAttribute("data-id");
       });
+      removeAll(element, [".article-detail-content hr", ".press-release-detail-content hr"]);
+      removeAll(element, [
+        '.article-detail-content img[src$="/media/2944/morethanparts.png"]',
+        '.press-release-detail-content img[src$="/media/2944/morethanparts.png"]'
+      ]);
+      if (element.querySelector("form#mediaList")) {
+        removeAll(element, [".filter-wrapper", "div:has(> form#mediaList) > h2"]);
+      }
       element.querySelectorAll("dl.faqs-content").forEach((dl) => {
         const doc = dl.ownerDocument;
         const out = doc.createElement("div");
@@ -339,9 +392,15 @@ var CustomImportScript = (() => {
         '.header-content-wrapper a[href^="/"]',
         '#offer-search .local-deals a[href^="/"]',
         '.about-us a[href^="/"]',
-        '.local-deals-cta a[href^="/"]'
+        '.local-deals-cta a[href^="/"]',
+        '.featured-downloads a[href^="/"]',
+        'ul.part-categories a[href^="/"]',
+        '.article-detail-content a[href^="/"]',
+        '.article-detail-content a[href^="https://www.trpparts.com/"]',
+        '.press-release-detail-content a[href^="/"]',
+        '.press-release-detail-content a[href^="https://www.trpparts.com/"]'
       ].join(", ")).forEach((a) => {
-        a.setAttribute("href", new URL(a.getAttribute("href"), "https://www.trpparts.com/").href);
+        a.setAttribute("href", siteHref(a.getAttribute("href")));
       });
       removeAll(element, [
         "#top > header",
@@ -375,10 +434,10 @@ var CustomImportScript = (() => {
         "#pagination-header",
         "#pagination-footer",
         "img.part-loading-image",
-        // non-content embeds
+        // non-content embeds (an article's YouTube video is kept for the embed parser)
         "script",
         "noscript",
-        "iframe",
+        'iframe:not(.article-detail-content iframe[src*="youtube.com/embed/"])',
         "link",
         // tracking pixels (e.g. DoubleClick floodlight)
         'img[src*="doubleclick.net"]',

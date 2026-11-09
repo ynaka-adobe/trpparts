@@ -9,6 +9,9 @@
  *   cell 2 = <p>title</p> (<sup> kept), then one <p> per .video-info > .row:
  *            "<label> <a>size</a> <a>size</a>" (empty placeholder links skipped)
  * Links keep their href as found (made absolute by the cleanup transformer).
+ * The TRP Downloads page (/media-center/trp-downloads/) marks items up a little differently: the
+ * title is an <h2>, and some download links sit directly in .video-info (p.download-item, or a <p>
+ * with several links split by <br>); each such line of links becomes its own <p>.
  */
 
 function cleanText(s) {
@@ -49,7 +52,9 @@ export default function parse(element, { document }) {
 
   items.forEach((item) => {
     const info = item.querySelector('.video-info');
-    const titleP = info ? info.querySelector(':scope > p') : null;
+    const titleP = info
+      ? (info.querySelector(':scope > h2, :scope > h3') || info.querySelector(':scope > p'))
+      : null;
     const title = cleanText(titleP ? titleP.textContent : '');
 
     // Cell 1: image (src + alt only)
@@ -91,6 +96,30 @@ export default function parse(element, { document }) {
           });
         });
         if (cleanText(p.textContent)) content.push(p);
+      });
+      // link lines directly in .video-info (TRP Downloads page): one <p> per line of links
+      info.querySelectorAll(':scope > p').forEach((line) => {
+        if (line === titleP) return;
+        let p = document.createElement('p');
+        const flush = () => {
+          if (cleanText(p.textContent)) content.push(p);
+          p = document.createElement('p');
+        };
+        line.childNodes.forEach((node) => {
+          if (node.nodeType === 1 && node.tagName === 'BR') {
+            flush();
+          } else if (node.nodeType === 1 && node.tagName === 'A') {
+            const href = node.getAttribute('href');
+            const text = cleanText(node.textContent);
+            if (!href || !text) return;
+            if (p.childNodes.length) p.append(document.createTextNode(' '));
+            p.append(makeLink(document, href, text));
+          } else if (cleanText(node.textContent)) {
+            if (p.childNodes.length) p.append(document.createTextNode(' '));
+            p.append(document.createTextNode(cleanText(node.textContent)));
+          }
+        });
+        flush();
       });
     }
 

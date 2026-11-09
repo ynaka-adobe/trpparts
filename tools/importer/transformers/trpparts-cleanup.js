@@ -13,6 +13,34 @@ function removeAll(root, selectors) {
   });
 }
 
+// pages migrated to this site: links to them stay site-relative, at the path Edge Delivery serves
+// them from (each segment lower-cased, accents dropped, other characters as "-", as the importer
+// names pages; folder URLs keep their trailing slash). The media archive's articles are
+// /media-center/<year>/<slug>/.
+const MIGRATED = ['/', '/resources/', '/media-center/', '/media-center/articles/',
+  '/media-center/press-releases/', '/media-center/trp-downloads/', '/performance-membership/',
+  '/deals/', '/about-us/', '/about-us/warranty/', '/about-us/faqs/', '/local-deals/'];
+const MIGRATED_ARTICLE = /^\/media-center\/\d{4}\/[a-z0-9-]+\/$/;
+
+function edsPath(pathname) {
+  const segments = pathname.split('/').filter(Boolean).map((s) => {
+    let name = s;
+    try { name = decodeURIComponent(s); } catch (e) { /* keep as is */ }
+    return name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  });
+  return `/${segments.join('/')}${segments.length ? '/' : ''}`;
+}
+
+// a trpparts.com link: site-relative when the page is migrated, else absolute on trpparts.com
+function siteHref(href) {
+  const url = new URL(href, 'https://www.trpparts.com/');
+  if (url.hostname !== 'www.trpparts.com' || /\.[a-z0-9]{2,5}$/i.test(url.pathname)) return url.href;
+  const path = edsPath(url.pathname);
+  return MIGRATED.includes(path) || MIGRATED_ARTICLE.test(path) ? `${path}${url.search}${url.hash}` : url.href;
+}
+
 const TRACKING_ATTRS = [
   'onclick', 'onload', 'onerror', 'onmouseover', 'onmouseout', 'onchange', 'onsubmit',
   'data-gtm', 'data-ga', 'data-track', 'data-tracking', 'data-analytics',
@@ -59,15 +87,22 @@ export default function transform(hookName, element, payload) {
 
     // warranty footnotes and FAQ answers: links to migrated pages stay site-relative (with the
     // trailing slash their EDS paths use); everything else is linked on trpparts.com
-    const MIGRATED = ['/', '/resources/', '/media-center/', '/performance-membership/', '/deals/',
-      '/about-us/', '/about-us/warranty/', '/about-us/faqs/'];
     element.querySelectorAll('.footnotes a[href^="/"], dl.faqs-content a[href^="/"]').forEach((a) => {
-      const url = new URL(a.getAttribute('href'), 'https://www.trpparts.com/');
-      const path = url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`;
-      a.setAttribute('href', MIGRATED.includes(path) ? `${path}${url.search}${url.hash}` : url.href);
+      a.setAttribute('href', siteHref(a.getAttribute('href')));
       a.removeAttribute('title');
       a.removeAttribute('data-id');
     });
+    // media archive (article and press release pages): the rules between parts are decoration
+    // (an <hr> would also start a new section), and YouTube players are kept for the embed block
+    removeAll(element, ['.article-detail-content hr', '.press-release-detail-content hr']);
+    // an article image that no longer exists on trpparts.com (404 there too)
+    removeAll(element, ['.article-detail-content img[src$="/media/2944/morethanparts.png"]',
+      '.press-release-detail-content img[src$="/media/2944/morethanparts.png"]']);
+    // media archive listings (Articles, Press Releases): the "Cards Articles (years)" block builds
+    // the year list and the year heading from its items
+    if (element.querySelector('form#mediaList')) {
+      removeAll(element, ['.filter-wrapper', 'div:has(> form#mediaList) > h2']);
+    }
     // FAQs: the questions are a definition list; author them as H2 headings with their answers
     element.querySelectorAll('dl.faqs-content').forEach((dl) => {
       const doc = dl.ownerDocument;
@@ -84,8 +119,9 @@ export default function transform(hookName, element, payload) {
       dl.replaceWith(...out.childNodes);
     });
 
-    // pages these link to aren't migrated (media center articles/downloads, membership sign-up
-    // and log-in, deals sign-up and local offers, about-us parts), so link them on trpparts.com
+    // most pages these link to aren't migrated (media downloads, membership sign-up and log-in,
+    // deals sign-up and local offers, about-us parts), so they are linked on trpparts.com; links to
+    // migrated pages (e.g. the media archive's articles and listings) stay site-relative
     element.querySelectorAll([
       '.media-center a[href^="/"]',
       '.hero-banner.large a[href^="/"]',
@@ -94,8 +130,14 @@ export default function transform(hookName, element, payload) {
       '#offer-search .local-deals a[href^="/"]',
       '.about-us a[href^="/"]',
       '.local-deals-cta a[href^="/"]',
+      '.featured-downloads a[href^="/"]',
+      'ul.part-categories a[href^="/"]',
+      '.article-detail-content a[href^="/"]',
+      '.article-detail-content a[href^="https://www.trpparts.com/"]',
+      '.press-release-detail-content a[href^="/"]',
+      '.press-release-detail-content a[href^="https://www.trpparts.com/"]',
     ].join(', ')).forEach((a) => {
-      a.setAttribute('href', new URL(a.getAttribute('href'), 'https://www.trpparts.com/').href);
+      a.setAttribute('href', siteHref(a.getAttribute('href')));
     });
 
     // Global chrome, popups, cookie consent, widgets (things that could confuse block matching)
@@ -131,10 +173,10 @@ export default function transform(hookName, element, payload) {
       '#pagination-header',
       '#pagination-footer',
       'img.part-loading-image',
-      // non-content embeds
+      // non-content embeds (an article's YouTube video is kept for the embed parser)
       'script',
       'noscript',
-      'iframe',
+      'iframe:not(.article-detail-content iframe[src*="youtube.com/embed/"])',
       'link',
       // tracking pixels (e.g. DoubleClick floodlight)
       'img[src*="doubleclick.net"]',

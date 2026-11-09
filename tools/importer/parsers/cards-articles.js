@@ -10,6 +10,9 @@
  *   cell 2 = <h3><a>title</a></h3> (inline <sup> kept), <p>date</p>,
  *            <p>teaser <a>READ MORE</a></p>
  * Links keep their href as found (made absolute by the cleanup transformer).
+ * The Articles / Press Releases listings (list inside form#mediaList, every year's items in the
+ * import snapshot) become "Cards Articles (years)": the block shows one year at a time, and their
+ * teasers have no READ MORE link (as on the source).
  */
 
 function cleanText(s) {
@@ -45,6 +48,7 @@ function copyInline(document, source, target) {
 
 export default function parse(element, { document }) {
   const cells = [];
+  const archive = Boolean(element.closest('#mediaList'));
   let items = [...element.querySelectorAll(':scope > li.media-item')];
   if (!items.length) items = [...element.querySelectorAll('li.media-item')];
 
@@ -100,7 +104,7 @@ export default function parse(element, { document }) {
         .join(' '));
       if (teaser) p.append(document.createTextNode(`${teaser} `));
       const moreHref = (more && more.getAttribute('href')) || href;
-      if (moreHref) {
+      if (moreHref && !archive) {
         p.append(makeLink(document, moreHref, cleanText(more ? more.textContent : '') || 'READ MORE'));
       }
       if (cleanText(p.textContent)) content.push(p);
@@ -109,6 +113,7 @@ export default function parse(element, { document }) {
     if (imageCell.length || content.length) cells.push([imageCell, content]);
   });
 
-  const block = WebImporter.Blocks.createBlock(document, { name: 'cards-articles', cells });
+  const name = archive ? 'Cards Articles (years)' : 'cards-articles';
+  const block = WebImporter.Blocks.createBlock(document, { name, cells });
   element.replaceWith(block);
 }

@@ -1,8 +1,10 @@
+/* a video in a media archive article spans the text column, with the source's 20px inset */
 .embed {
   width: unset;
   text-align: center;
-  max-width: 800px;
-  margin: 32px auto;
+  max-width: none;
+  margin: 20px 0;
+  padding: 0 20px;
 }
 
 .embed > div {

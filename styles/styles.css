@@ -622,3 +622,92 @@ main > .section.cards-deals-container > .default-content-wrapper:last-child a.bu
     padding-left: calc(25% + 16px);
   }
 }
+
+/*
+ * media archive articles and press releases (metadata template: media-article, source
+ * /media-center/<year>/<slug>/): title, date line, body copy with the source's image placement
+ */
+/* stylelint-disable no-descending-specificity -- article pages use none of the section styles above */
+body.media-article main > .section > .default-content-wrapper > h1 {
+  max-width: 80%;
+  margin: 33px 0 0;
+}
+
+/* the date line under the title */
+body.media-article main > .section > .default-content-wrapper > h1 + p {
+  margin: 14px 0;
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+}
+
+body.media-article main .default-content-wrapper h2 {
+  margin: 16.6px 0;
+  font-family: var(--condensed-font-family);
+  font-size: 20px;
+  font-weight: var(--condensed-font-weight);
+  line-height: 27.5px;
+}
+
+/* the newer campaign articles (image and text columns) set their section headings larger, in capitals */
+body.media-article main:has(.columns) .default-content-wrapper h2,
+body.media-article main .columns h2 {
+  margin: 16.6px 0;
+  color: #000;
+  font-family: var(--condensed-font-family);
+  font-size: 24px;
+  font-weight: var(--condensed-font-weight);
+  line-height: 33px;
+  text-transform: uppercase;
+}
+
+/* images: centered at their own size; the photos the source floats right of the text (metadata
+   image-float, marked by scripts.js) show at most 350px wide like the source's */
+body.media-article main .default-content-wrapper p picture {
+  display: block;
+  text-align: center;
+}
+
+body.media-article main .default-content-wrapper picture img {
+  max-width: 100%;
+  height: auto;
+}
+
+body.media-article main .default-content-wrapper picture.image-right {
+  float: right;
+  max-width: min(350px, 50%);
+  margin: 0 0 8px;
+  padding-left: 20px;
+}
+
+/* breakpoint-exception: on phones the source's floated photo fills the column (48em grid) */
+@media (width < 768px) {
+  body.media-article main .default-content-wrapper picture.image-right {
+    float: none;
+    max-width: none;
+    margin: 0;
+    padding-left: 0;
+  }
+}
+
+body.media-article main .default-content-wrapper::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* the offers button closing an article is centered */
+body.media-article main .default-content-wrapper p.button-container {
+  display: block;
+  text-align: center;
+}
+
+/* TRP Downloads page (template media-downloads): the list is the page body, aligned with the
+   breadcrumb, not the indented downloads band of the media center page */
+body.media-downloads main > .section.cards-downloads-container {
+  padding: 0 0 32px;
+}
+
+body.media-downloads main > .section.cards-downloads-container > div {
+  padding: 0 16px;
+}
+/* stylelint-enable no-descending-specificity */

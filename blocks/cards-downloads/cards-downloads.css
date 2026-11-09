@@ -116,3 +116,62 @@
 .cards-downloads a.cards-downloads-link:focus-visible {
   color: var(--link-hover-color);
 }
+
+/* a line of download links without a format label (a checklist's PDFs): one link per line */
+.cards-downloads .cards-downloads-format:has(> .cards-downloads-format-label:empty) {
+  display: block;
+}
+
+.cards-downloads .cards-downloads-format:has(> .cards-downloads-format-label:empty) a {
+  display: block;
+  width: fit-content;
+  min-height: 24px;
+  line-height: 24px;
+}
+
+/*
+ * TRP Downloads page (metadata template: media-downloads, source /media-center/trp-downloads/):
+ * one download per row in the 9/12 content column; phones stack image and text, from 768px the
+ * image (5/12) sits beside its title and links (5/12); titles are the condensed 24px headings
+ */
+body.media-downloads .cards-downloads > ul {
+  display: block;
+  padding: 0 0 0 16px;
+}
+
+body.media-downloads .cards-downloads .cards-downloads-item {
+  padding: 16px 16px 32px;
+}
+
+/* the full-width rows leave the format grid its natural 16px gaps (sizes stay on one line) */
+/* stylelint-disable-next-line no-descending-specificity -- only sets the gap, not the display */
+body.media-downloads .cards-downloads .cards-downloads-format {
+  column-gap: 16px;
+}
+
+body.media-downloads .cards-downloads .cards-downloads-title {
+  margin: 19.92px 0;
+  font-family: var(--condensed-font-family);
+  font-size: 24px;
+  font-weight: var(--condensed-font-weight);
+  line-height: 33px;
+}
+
+/* breakpoint-exception: the source grid puts image and text side by side at 48em (768px) */
+@media (width >= 768px) {
+  body.media-downloads .cards-downloads > ul {
+    max-width: calc(75% - 16px);
+    padding-left: 16px;
+  }
+
+  body.media-downloads .cards-downloads .cards-downloads-item {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) minmax(0, 2fr);
+    column-gap: 32px;
+    padding: 0 0 32px;
+  }
+
+  body.media-downloads .cards-downloads .cards-downloads-title {
+    margin-top: 19.92px;
+  }
+}

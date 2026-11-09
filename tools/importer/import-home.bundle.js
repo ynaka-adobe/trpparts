@@ -410,6 +410,38 @@ var CustomImportScript = (() => {
       root.querySelectorAll(sel).forEach((el) => el.remove());
     });
   }
+  var MIGRATED = [
+    "/",
+    "/resources/",
+    "/media-center/",
+    "/media-center/articles/",
+    "/media-center/press-releases/",
+    "/media-center/trp-downloads/",
+    "/performance-membership/",
+    "/deals/",
+    "/about-us/",
+    "/about-us/warranty/",
+    "/about-us/faqs/",
+    "/local-deals/"
+  ];
+  var MIGRATED_ARTICLE = /^\/media-center\/\d{4}\/[a-z0-9-]+\/$/;
+  function edsPath(pathname) {
+    const segments = pathname.split("/").filter(Boolean).map((s) => {
+      let name = s;
+      try {
+        name = decodeURIComponent(s);
+      } catch (e) {
+      }
+      return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    });
+    return `/${segments.join("/")}${segments.length ? "/" : ""}`;
+  }
+  function siteHref(href) {
+    const url = new URL(href, "https://www.trpparts.com/");
+    if (url.hostname !== "www.trpparts.com" || /\.[a-z0-9]{2,5}$/i.test(url.pathname)) return url.href;
+    const path = edsPath(url.pathname);
+    return MIGRATED.includes(path) || MIGRATED_ARTICLE.test(path) ? `${path}${url.search}${url.hash}` : url.href;
+  }
   var TRACKING_ATTRS = [
     "onclick",
     "onload",
@@ -427,11 +459,78 @@ var CustomImportScript = (() => {
     "aria-describedby"
   ];
   function transform(hookName, element, payload) {
+    var _a, _b;
     if (hookName === "beforeTransform") {
       removeAll(element, [".media-center > .row.media-desktop"]);
       removeAll(element, [".container-fluid:has(> .row.performance-line)", ".row.performance-line"]);
-      element.querySelectorAll('.media-center a[href^="/"], .hero-banner.large a[href^="/"], .performance-list a[href^="/"]').forEach((a) => {
-        a.setAttribute("href", new URL(a.getAttribute("href"), "https://www.trpparts.com/").href);
+      removeAll(element, ["#offer-search .pagination-header", "#offer-search .show-offers-btn"]);
+      removeAll(element, [".about-us > hr"]);
+      const aboutRows = [...element.querySelectorAll(".about-us > .row")];
+      if (aboutRows.length) {
+        const bands = element.ownerDocument.createElement("div");
+        bands.className = "about-us-bands";
+        aboutRows[0].before(bands);
+        bands.append(...aboutRows);
+      }
+      const retailerDetail = element.querySelector("#retailer-detail");
+      if (retailerDetail) {
+        const doc = retailerDetail.ownerDocument;
+        (_b = (_a = element.querySelector("h2#special-offers")) == null ? void 0 : _a.closest(".row")) == null ? void 0 : _b.remove();
+        const intro = doc.createElement("p");
+        intro.textContent = "Local deals vary by TRP retailer. See the current deals at the TRP retailer closest to you.";
+        const cta = doc.createElement("p");
+        const link = doc.createElement("a");
+        link.href = "https://www.trpparts.com/local-deals/";
+        link.textContent = "Find Your Local Deals";
+        cta.append(link);
+        retailerDetail.replaceWith(intro, cta);
+      }
+      element.querySelectorAll(".hero-banner.large p").forEach((p) => {
+        if (!p.textContent.trim() && !p.querySelector("img, picture, a")) p.remove();
+      });
+      element.querySelectorAll('.footnotes a[href^="/"], dl.faqs-content a[href^="/"]').forEach((a) => {
+        a.setAttribute("href", siteHref(a.getAttribute("href")));
+        a.removeAttribute("title");
+        a.removeAttribute("data-id");
+      });
+      removeAll(element, [".article-detail-content hr", ".press-release-detail-content hr"]);
+      removeAll(element, [
+        '.article-detail-content img[src$="/media/2944/morethanparts.png"]',
+        '.press-release-detail-content img[src$="/media/2944/morethanparts.png"]'
+      ]);
+      if (element.querySelector("form#mediaList")) {
+        removeAll(element, [".filter-wrapper", "div:has(> form#mediaList) > h2"]);
+      }
+      element.querySelectorAll("dl.faqs-content").forEach((dl) => {
+        const doc = dl.ownerDocument;
+        const out = doc.createElement("div");
+        [...dl.children].forEach((item) => {
+          if (item.tagName === "DT") {
+            const h2 = doc.createElement("h2");
+            h2.innerHTML = item.innerHTML.trim();
+            out.append(h2);
+          } else if (item.tagName === "DD") {
+            out.append(...item.childNodes);
+          }
+        });
+        dl.replaceWith(...out.childNodes);
+      });
+      element.querySelectorAll([
+        '.media-center a[href^="/"]',
+        '.hero-banner.large a[href^="/"]',
+        '.performance-list a[href^="/"]',
+        '.header-content-wrapper a[href^="/"]',
+        '#offer-search .local-deals a[href^="/"]',
+        '.about-us a[href^="/"]',
+        '.local-deals-cta a[href^="/"]',
+        '.featured-downloads a[href^="/"]',
+        'ul.part-categories a[href^="/"]',
+        '.article-detail-content a[href^="/"]',
+        '.article-detail-content a[href^="https://www.trpparts.com/"]',
+        '.press-release-detail-content a[href^="/"]',
+        '.press-release-detail-content a[href^="https://www.trpparts.com/"]'
+      ].join(", ")).forEach((a) => {
+        a.setAttribute("href", siteHref(a.getAttribute("href")));
       });
       removeAll(element, [
         "#top > header",
@@ -465,10 +564,10 @@ var CustomImportScript = (() => {
         "#pagination-header",
         "#pagination-footer",
         "img.part-loading-image",
-        // non-content embeds
+        // non-content embeds (an article's YouTube video is kept for the embed parser)
         "script",
         "noscript",
-        "iframe",
+        'iframe:not(.article-detail-content iframe[src*="youtube.com/embed/"])',
         "link",
         // tracking pixels (e.g. DoubleClick floodlight)
         'img[src*="doubleclick.net"]',

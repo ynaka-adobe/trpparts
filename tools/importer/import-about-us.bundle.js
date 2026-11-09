@@ -216,6 +216,38 @@ var CustomImportScript = (() => {
       root.querySelectorAll(sel).forEach((el) => el.remove());
     });
   }
+  var MIGRATED = [
+    "/",
+    "/resources/",
+    "/media-center/",
+    "/media-center/articles/",
+    "/media-center/press-releases/",
+    "/media-center/trp-downloads/",
+    "/performance-membership/",
+    "/deals/",
+    "/about-us/",
+    "/about-us/warranty/",
+    "/about-us/faqs/",
+    "/local-deals/"
+  ];
+  var MIGRATED_ARTICLE = /^\/media-center\/\d{4}\/[a-z0-9-]+\/$/;
+  function edsPath(pathname) {
+    const segments = pathname.split("/").filter(Boolean).map((s) => {
+      let name = s;
+      try {
+        name = decodeURIComponent(s);
+      } catch (e) {
+      }
+      return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    });
+    return `/${segments.join("/")}${segments.length ? "/" : ""}`;
+  }
+  function siteHref(href) {
+    const url = new URL(href, "https://www.trpparts.com/");
+    if (url.hostname !== "www.trpparts.com" || /\.[a-z0-9]{2,5}$/i.test(url.pathname)) return url.href;
+    const path = edsPath(url.pathname);
+    return MIGRATED.includes(path) || MIGRATED_ARTICLE.test(path) ? `${path}${url.search}${url.hash}` : url.href;
+  }
   var TRACKING_ATTRS = [
     "onclick",
     "onload",
@@ -262,23 +294,19 @@ var CustomImportScript = (() => {
       element.querySelectorAll(".hero-banner.large p").forEach((p) => {
         if (!p.textContent.trim() && !p.querySelector("img, picture, a")) p.remove();
       });
-      const MIGRATED = [
-        "/",
-        "/resources/",
-        "/media-center/",
-        "/performance-membership/",
-        "/deals/",
-        "/about-us/",
-        "/about-us/warranty/",
-        "/about-us/faqs/"
-      ];
       element.querySelectorAll('.footnotes a[href^="/"], dl.faqs-content a[href^="/"]').forEach((a) => {
-        const url = new URL(a.getAttribute("href"), "https://www.trpparts.com/");
-        const path = url.pathname.endsWith("/") ? url.pathname : `${url.pathname}/`;
-        a.setAttribute("href", MIGRATED.includes(path) ? `${path}${url.search}${url.hash}` : url.href);
+        a.setAttribute("href", siteHref(a.getAttribute("href")));
         a.removeAttribute("title");
         a.removeAttribute("data-id");
       });
+      removeAll(element, [".article-detail-content hr", ".press-release-detail-content hr"]);
+      removeAll(element, [
+        '.article-detail-content img[src$="/media/2944/morethanparts.png"]',
+        '.press-release-detail-content img[src$="/media/2944/morethanparts.png"]'
+      ]);
+      if (element.querySelector("form#mediaList")) {
+        removeAll(element, [".filter-wrapper", "div:has(> form#mediaList) > h2"]);
+      }
       element.querySelectorAll("dl.faqs-content").forEach((dl) => {
         const doc = dl.ownerDocument;
         const out = doc.createElement("div");
@@ -300,9 +328,15 @@ var CustomImportScript = (() => {
         '.header-content-wrapper a[href^="/"]',
         '#offer-search .local-deals a[href^="/"]',
         '.about-us a[href^="/"]',
-        '.local-deals-cta a[href^="/"]'
+        '.local-deals-cta a[href^="/"]',
+        '.featured-downloads a[href^="/"]',
+        'ul.part-categories a[href^="/"]',
+        '.article-detail-content a[href^="/"]',
+        '.article-detail-content a[href^="https://www.trpparts.com/"]',
+        '.press-release-detail-content a[href^="/"]',
+        '.press-release-detail-content a[href^="https://www.trpparts.com/"]'
       ].join(", ")).forEach((a) => {
-        a.setAttribute("href", new URL(a.getAttribute("href"), "https://www.trpparts.com/").href);
+        a.setAttribute("href", siteHref(a.getAttribute("href")));
       });
       removeAll(element, [
         "#top > header",
@@ -336,10 +370,10 @@ var CustomImportScript = (() => {
         "#pagination-header",
         "#pagination-footer",
         "img.part-loading-image",
-        // non-content embeds
+        // non-content embeds (an article's YouTube video is kept for the embed parser)
         "script",
         "noscript",
-        "iframe",
+        'iframe:not(.article-detail-content iframe[src*="youtube.com/embed/"])',
         "link",
         // tracking pixels (e.g. DoubleClick floodlight)
         'img[src*="doubleclick.net"]',

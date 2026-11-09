@@ -29,6 +29,21 @@ export default async function decorate(block) {
       row.append(cell);
     });
   });
+  // each body cell knows its column name, so narrow screens can stack a row as "label value" lines;
+  // explicit roles keep it a table for assistive tech once CSS lays it out as blocks
+  table.setAttribute('role', 'table');
+  table.querySelectorAll('tr').forEach((tr) => tr.setAttribute('role', 'row'));
+  table.querySelectorAll('th').forEach((th) => th.setAttribute('role', 'columnheader'));
+  table.querySelectorAll('td').forEach((td) => td.setAttribute('role', 'cell'));
+  [thead, tbody].forEach((group) => group.setAttribute('role', 'rowgroup'));
+  if (header && thead.rows[0]) {
+    const labels = [...thead.rows[0].cells].map((th) => th.textContent.trim());
+    [...tbody.rows].forEach((tr) => {
+      [...tr.cells].forEach((td, i) => {
+        if (labels[i]) td.dataset.label = labels[i];
+      });
+    });
+  }
   block.innerHTML = '';
   block.append(table);
 }

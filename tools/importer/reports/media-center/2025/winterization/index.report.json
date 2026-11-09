@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "url": "https://www.trpparts.com/media-center/2025/winterization/",
+  "path": "media-center/2025/winterization/index",
+  "timestamp": "2026-11-09T03:57:57.222Z",
+  "title": "WINTERIZATION CHECKLIST",
+  "template": "media-article",
+  "blocks": [
+    "columns",
+    "columns",
+    "columns-retailer"
+  ]
+}

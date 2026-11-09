@@ -1,5 +1,8 @@
+/* table: part-number and store tables in media archive articles (source: table.mobile-formatted,
+   14px text, a grey header row, every other row tinted; phones stack each row as label + value) */
 .table {
   width: 100%;
+  margin: 16px 0;
   overflow-x: auto;
 }
 
@@ -7,37 +10,22 @@
   width: 100%;
   max-width: 100%;
   border-collapse: collapse;
-  font-size: var(--body-font-size-xs);
-}
-
-@media (width >= 600px) {
-  .table table {
-    font-size: var(--body-font-size-s);
-  }
-}
-
-@media (width >= 900px) {
-  .table table {
-    font-size: var(--body-font-size-m);
-  }
-}
-
-.table table thead tr {
-  border-top: 2px solid #dadada;
-  border-bottom: 2px solid #dadada;
-}
-
-.table table tbody tr {
-  border-bottom: 1px solid #dadada;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
 }
 
 .table table th {
+  padding: 0 7px;
+  border-bottom: 1px solid rgb(0 0 0 / 20%);
+  background-color: var(--light-color);
   font-weight: 700;
+  text-align: left;
 }
 
-.table table th,
 .table table td {
-  padding: 0.5em;
+  padding: 0 7px;
   text-align: left;
 }
 
@@ -52,16 +40,56 @@
 
 /* no header variant */
 .table.no-header table tbody tr {
-  border-top: 1px solid #dadada;
+  border-top: 1px solid var(--light-color);
 }
 
 /* striped variant */
 .table.striped tbody tr:nth-child(odd) {
-  background-color: var(--light-color);
+  background-color: #f4f4f4;
+}
+
+.table.striped tbody tr:nth-child(even) {
+  background-color: #fff;
 }
 
 /* bordered variant */
 .table.bordered table th,
 .table.bordered table td {
-  border: 1px solid #dadada;
+  border: 1px solid var(--light-color);
+}
+
+/* breakpoint-exception: the source stacks its tables below 48em (768px) */
+@media (width < 768px) {
+  .table table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+  }
+
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .table tbody tr {
+    padding: 3.5px 0;
+  }
+
+  .table td[data-label]::before {
+    content: attr(data-label);
+    display: inline-block;
+    min-width: 7em;
+    padding-right: 8px;
+    font-weight: 600;
+  }
+
+  /* the value stays on the label's line */
+  .table td[data-label] > p {
+    display: inline;
+  }
 }

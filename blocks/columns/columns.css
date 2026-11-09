@@ -1,33 +1,65 @@
+/* columns: side-by-side content in media archive articles (source: .flex-container with
+   .column-1 / .column-2 children, a 40px gap, top aligned, stacked below 769px in source order) */
 .columns > div {
   display: flex;
   flex-direction: column;
+  gap: 40px;
+  margin: 16px 0;
 }
 
 .columns img {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .columns > div > div {
-  order: 1;
+  min-width: 0;
 }
 
-.columns > div > .columns-img-col {
-  order: 0;
+.columns > div > div > :first-child {
+  margin-top: 0;
 }
 
-.columns > div > .columns-img-col img {
-  display: block;
+.columns > div > div > :last-child {
+  margin-bottom: 0;
 }
 
-@media (width >= 900px) {
+.columns > div > div p:has(> picture:only-child) {
+  margin: 0;
+}
+
+/* lockup (an event date badge beside its intro): the badge shows 150px high like the source (the
+   badges are larger files); a fixed height with the image's aspect ratio reserves its space */
+.columns.lockup > div > div:first-child {
+  text-align: center;
+}
+
+.columns.lockup > div > div:first-child img {
+  display: inline-block;
+  width: auto;
+  height: 150px;
+}
+
+/* breakpoint-exception: the source stacks its columns at max-width 768px */
+@media (width >= 769px) {
   .columns > div {
-    align-items: center;
-    flex-direction: unset;
-    gap: 24px;
+    flex-direction: row;
+    align-items: flex-start;
   }
 
   .columns > div > div {
     flex: 1;
-    order: unset;
+  }
+
+  /* source column-2 beside column-1: a 2:1 split */
+  .columns.wide-narrow > div > div:first-child,
+  .columns.narrow-wide > div > div:last-child {
+    flex: 2;
+  }
+
+  .columns.lockup > div > div:first-child {
+    flex: 0 0 auto;
   }
 }

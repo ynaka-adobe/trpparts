@@ -164,3 +164,142 @@
     margin-top: 0;
   }
 }
+
+/*
+ * "years" option (Articles / Press Releases archives, source: /media-center/articles/): a year list
+ * (sidebar from 768px, folded behind a grey "Filter List" bar on phones) beside one year's items
+ */
+.cards-articles .cards-articles-item[hidden] {
+  display: none;
+}
+
+.cards-articles.years .cards-articles-years-toggle {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 0;
+  background-color: #666;
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 25.6px;
+  text-align: left;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cards-articles.years .cards-articles-years-toggle::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin: 0 0 2px 8px;
+  border-top: 2px solid currentcolor;
+  border-left: 2px solid currentcolor;
+  transform: rotate(45deg);
+  vertical-align: middle;
+}
+
+.cards-articles.years .cards-articles-years-toggle[aria-expanded='true']::after {
+  margin-bottom: 5px;
+  transform: rotate(225deg);
+}
+
+.cards-articles.years .cards-articles-years {
+  display: none;
+  margin: 0 0 32px;
+  padding: 0 16px;
+  background-color: #f4f4f4;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  line-height: 25.6px;
+}
+
+.cards-articles.years .cards-articles-years.is-open {
+  display: block;
+}
+
+.cards-articles.years .cards-articles-years > p {
+  margin: 0 0 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--light-color);
+}
+
+.cards-articles.years .cards-articles-years ul {
+  margin: 0;
+  padding: 0 0 16px;
+  list-style: none;
+}
+
+.cards-articles.years .cards-articles-years li {
+  margin: 0;
+}
+
+.cards-articles.years .cards-articles-years a:any-link {
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
+.cards-articles.years .cards-articles-years li a:any-link {
+  font-size: 14.4px;
+  line-height: 23.04px;
+}
+
+.cards-articles.years .cards-articles-year {
+  margin: 19.92px 0;
+  color: var(--text-color);
+  font-family: var(--condensed-font-family);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 33px;
+}
+
+.cards-articles.years .cards-articles-year:focus {
+  outline: none;
+}
+
+/* breakpoint-exception: the source grid puts the year list (3/12) beside the items (9/12) at 48em */
+@media (width >= 768px) {
+  .cards-articles.years {
+    display: grid;
+    grid-template-columns: calc((100% + 32px) / 4 - 32px) minmax(0, 1fr);
+    column-gap: 32px;
+  }
+
+  .cards-articles.years .cards-articles-years-toggle {
+    display: none;
+  }
+
+  .cards-articles.years .cards-articles-years,
+  .cards-articles.years .cards-articles-years.is-open {
+    display: block;
+    margin: 0;
+    padding: 8px 16px 0 0;
+    border-right: 1px solid var(--light-color);
+    background: none;
+  }
+
+  .cards-articles.years .cards-articles-years ul {
+    padding-left: 16px;
+  }
+
+  .cards-articles.years .cards-articles-panel > ul {
+    padding-left: 32px;
+  }
+
+  /* items: thumbnail 2/12 beside the text 10/12 */
+  .cards-articles.years .cards-articles-card-image {
+    flex-basis: 16.667%;
+    max-width: 16.667%;
+  }
+
+  .cards-articles.years .cards-articles-card-body {
+    flex-basis: 83.333%;
+    max-width: 83.333%;
+  }
+}

@@ -127,8 +127,99 @@ function buildItem(row) {
   return li;
 }
 
+/**
+ * "years" option (Articles / Press Releases archives): every year's items are authored, newest
+ * first; a year list beside them shows one year at a time. The year is kept in the URL (?year=)
+ * like the source's year links, so a year can be linked to and Back returns to the previous one.
+ * @param {Element} block
+ * @param {Element} ul the decorated item list
+ */
+function buildYears(block, ul) {
+  const items = [...ul.children];
+  items.forEach((li) => {
+    const years = text(li.querySelector('.cards-articles-date')).match(/\b\d{4}\b/g);
+    li.dataset.year = years ? years[years.length - 1] : '';
+  });
+  const years = [...new Set(items.map((li) => li.dataset.year).filter(Boolean))];
+  if (!years.length) return;
+
+  const listName = text(document.querySelector('main h1')) || 'All';
+  const nav = document.createElement('nav');
+  nav.className = 'cards-articles-years';
+  nav.setAttribute('aria-label', `${listName} by year`);
+  nav.id = `cards-articles-years-${[...document.querySelectorAll('.cards-articles-years')].length}`;
+
+  // phones: the year list is folded behind a "Filter List" toggle, as on the source
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'cards-articles-years-toggle';
+  toggle.textContent = 'Filter List';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-controls', nav.id);
+  toggle.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') !== 'true';
+    toggle.setAttribute('aria-expanded', String(open));
+    nav.classList.toggle('is-open', open);
+  });
+
+  const all = document.createElement('p');
+  const allLink = document.createElement('a');
+  allLink.href = window.location.pathname;
+  allLink.textContent = listName;
+  all.append(allLink);
+  const list = document.createElement('ul');
+  const links = years.map((year) => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = `?year=${year}`;
+    a.dataset.year = year;
+    a.textContent = year;
+    li.append(a);
+    list.append(li);
+    return a;
+  });
+  nav.append(all, list);
+
+  const heading = document.createElement('h2');
+  heading.className = 'cards-articles-year';
+  heading.tabIndex = -1;
+  const panel = document.createElement('div');
+  panel.className = 'cards-articles-panel';
+  panel.append(heading, ul);
+
+  const show = (wanted) => {
+    const year = years.includes(wanted) ? wanted : years[0];
+    heading.textContent = year;
+    items.forEach((li) => { li.hidden = li.dataset.year !== year; });
+    links.forEach((a) => {
+      if (a.dataset.year === year) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    return year;
+  };
+  const fromUrl = () => show(new URLSearchParams(window.location.search).get('year'));
+
+  nav.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    const year = show(a.dataset.year);
+    const url = new URL(window.location.href);
+    if (a.dataset.year) url.searchParams.set('year', year);
+    else url.searchParams.delete('year');
+    if (url.href !== window.location.href) window.history.pushState(null, '', url);
+    heading.focus({ preventScroll: true });
+    if (heading.getBoundingClientRect().top < 0) heading.scrollIntoView();
+  });
+  window.addEventListener('popstate', fromUrl);
+
+  fromUrl();
+  block.replaceChildren(toggle, nav, panel);
+}
+
 export default function decorate(block) {
   const ul = document.createElement('ul');
   ul.append(...[...block.children].map(buildItem));
   block.replaceChildren(ul);
+  if (block.classList.contains('years')) buildYears(block, ul);
 }
