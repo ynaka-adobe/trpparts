@@ -1,1 +1,6 @@
 helix-importer-ui
+# third-party and internal tooling (not site code)
+deps/at/vendor-at.js
+tools
+actions
+plugins/experimentation

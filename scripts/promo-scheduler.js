@@ -13,7 +13,7 @@
 const SCHEDULER_URL = '/fragments/promo-scheduler.json';
 const DATE_KEY = 'url.date';
 
-function getEffectiveDate() {
+export function getEffectiveDate() {
   const params = new URLSearchParams(window.location.search);
   const urlDate = params.get(DATE_KEY);
   if (urlDate) {
@@ -23,6 +23,24 @@ function getEffectiveDate() {
   const stored = sessionStorage.getItem(DATE_KEY);
   if (stored) return new Date(stored);
   return new Date();
+}
+
+/**
+ * Picks the first row whose start/end window contains `now`; otherwise the
+ * first row with no dates (the default). Rows without a fragment are ignored.
+ */
+export function pickPromoFragment(data, now) {
+  const rows = data
+    .map((row) => ({
+      start: row.start ? new Date(row.start) : null,
+      end: row.end ? new Date(row.end) : null,
+      // Support both "fragment URL" (current sheet header) and "fragment"
+      fragment: row['fragment URL'] || row.fragment || '',
+    }))
+    .filter((row) => row.fragment);
+  const match = rows.find(({ start, end }) => start && end && now >= start && now < end);
+  const fallback = rows.find(({ start, end }) => !start && !end);
+  return (match || fallback)?.fragment || null;
 }
 
 async function fetchFragment(path) {
@@ -43,29 +61,7 @@ export default async function initPromoScheduler(container) {
   const { data } = await resp.json();
   const now = getEffectiveDate();
 
-  let match = null;
-  let fallback = null;
-
-  for (const row of data) {
-    const start = row.start ? new Date(row.start) : null;
-    const end = row.end ? new Date(row.end) : null;
-    // Support both "fragment URL" (current sheet header) and "fragment"
-    const fragment = row['fragment URL'] || row.fragment || '';
-
-    if (!fragment) continue;
-
-    if (!start && !end) {
-      if (!fallback) fallback = fragment;
-      continue;
-    }
-
-    if (start && end && now >= start && now < end) {
-      match = fragment;
-      break;
-    }
-  }
-
-  const chosen = match || fallback;
+  const chosen = pickPromoFragment(data, now);
   if (!chosen) return;
 
   try {

@@ -22,6 +22,43 @@ import {
   applyTargetHeroMboxIfConfigured,
 } from './target.js';
 
+/** DA Nexter origin, used by the sidekick experimentation plugin. */
+export const NX_ORIGIN = new URLSearchParams(window.location.search).get('nx') === 'local'
+  ? 'http://localhost:6456/nx'
+  : 'https://da.live/nx';
+
+/**
+ * Moves the given attributes from one element to another.
+ * @param {Element} from the element to copy attributes from
+ * @param {Element} to the element to copy attributes to
+ * @param {string[]} [attributes] attribute names to move (defaults to all)
+ */
+export function moveAttributes(from, to, attributes) {
+  const names = attributes || [...from.attributes].map(({ nodeName }) => nodeName);
+  names.forEach((attr) => {
+    const value = from.getAttribute(attr);
+    if (value) {
+      to?.setAttribute(attr, value);
+      from.removeAttribute(attr);
+    }
+  });
+}
+
+/**
+ * Moves Universal Editor instrumentation attributes from one element to another.
+ * @param {Element} from the element to copy attributes from
+ * @param {Element} to the element to copy attributes to
+ */
+export function moveInstrumentation(from, to) {
+  moveAttributes(
+    from,
+    to,
+    [...from.attributes]
+      .map(({ nodeName }) => nodeName)
+      .filter((attr) => attr.startsWith('data-aue-') || attr.startsWith('data-richtext-')),
+  );
+}
+
 /**
  * Builds hero block and prepends to main in a new section.
  * @param {Element} main The container element
