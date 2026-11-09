@@ -523,6 +523,7 @@ var CustomImportScript = (() => {
       const { document: document2, url, params } = payload;
       const main = document2.body;
       const crumb = (((_a = document2.querySelector("nav.breadcrumbs li.active")) == null ? void 0 : _a.textContent) || "").replace(/\s+/g, " ").trim();
+      const floated = [...document2.querySelectorAll(".article-detail-content img, .press-release-detail-content img")].filter((img) => !/\/media\/2944\/morethanparts\.png$/.test(img.getAttribute("src") || "")).map((img, i) => /float:\s*right/i.test(img.getAttribute("style") || "") ? i + 1 : 0).filter(Boolean);
       executeTransformers("beforeTransform", main, payload);
       const pageBlocks = findBlocksOnPage(document2, PAGE_TEMPLATE);
       pageBlocks.forEach((block) => {
@@ -538,6 +539,7 @@ var CustomImportScript = (() => {
       executeTransformers("afterTransform", main, payload);
       main.appendChild(document2.createElement("hr"));
       const meta = WebImporter.Blocks.getMetadata(document2);
+      if (typeof meta.Title === "string") meta.Title = meta.Title.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
       meta.breadcrumbs = "true";
       meta["breadcrumb-parent"] = "Media";
       main.append(WebImporter.Blocks.getMetadataBlock(document2, meta));

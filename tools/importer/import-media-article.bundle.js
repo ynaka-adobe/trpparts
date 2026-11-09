@@ -689,6 +689,7 @@ var CustomImportScript = (() => {
       executeTransformers("afterTransform", main, payload);
       main.appendChild(document2.createElement("hr"));
       const meta = WebImporter.Blocks.getMetadata(document2);
+      if (typeof meta.Title === "string") meta.Title = meta.Title.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
       meta.breadcrumbs = "true";
       meta["breadcrumb-parent"] = "Media";
       if (crumb) meta["breadcrumb-title"] = crumb;

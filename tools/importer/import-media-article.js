@@ -264,6 +264,8 @@ export default {
 
     main.appendChild(document.createElement('hr'));
     const meta = WebImporter.Blocks.getMetadata(document);
+    // a few source titles carry markup as text ("TRP<sup>®</sup> ..."): keep the words only
+    if (typeof meta.Title === 'string') meta.Title = meta.Title.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
     // the trail the source shows: "Home › Media › <short page name>" (the year folder has no page)
     meta.breadcrumbs = 'true';
     meta['breadcrumb-parent'] = 'Media';

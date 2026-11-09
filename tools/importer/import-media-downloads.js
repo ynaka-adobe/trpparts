@@ -122,6 +122,8 @@ export default {
 
     main.appendChild(document.createElement('hr'));
     const meta = WebImporter.Blocks.getMetadata(document);
+    // a few source titles carry markup as text ("TRP<sup>®</sup> ..."): keep the words only
+    if (typeof meta.Title === 'string') meta.Title = meta.Title.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
     // the source page has the site's generic title; the trail shows "Home › Media › TRP Downloads"
     meta.Title = 'TRP Downloads';
     meta.breadcrumbs = 'true';
